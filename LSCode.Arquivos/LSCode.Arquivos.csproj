@@ -5,20 +5,22 @@
     <Authors>LSCode</Authors>
     <Company>LSCode</Company>
     <Copyright>LSCode</Copyright>
-    <AssemblyVersion>2020.09.18.1</AssemblyVersion>
+    <AssemblyVersion>2021.10.11.1</AssemblyVersion>
     <Description>Oferece códigos para facilitar a manipulação de arquivos nos projetos produzidos pela LSCode</Description>
     <Product>LSCode.Arquivos</Product>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.3</Version>
+    <Version>1.5</Version>
     <PackageIcon>LSCodePackageIcon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <FileVersion>1.3.0.0</FileVersion>
+    <FileVersion>1.5.0.0</FileVersion>
     <NeutralLanguage>pt-BR</NeutralLanguage>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/lsantoss/LSCode.Arquivos</RepositoryUrl>
     <PackageProjectUrl>https://github.com/lsantoss/LSCode.Arquivos</PackageProjectUrl>
     <PackageTags>LSCode</PackageTags>
-    <PackageReleaseNotes>Inclusão de documentação XML no projeto.</PackageReleaseNotes>
+    <PackageReleaseNotes>Inclusão de documentação XML no projeto.
+Melhorias no código fonte já existente.
+Compactação de imagens incluída no pacote.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
