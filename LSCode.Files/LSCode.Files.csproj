@@ -5,18 +5,18 @@
     <Authors>LSCode</Authors>
     <Company>LSCode</Company>
     <Copyright>LSCode</Copyright>
-    <AssemblyVersion>2021.10.11.2</AssemblyVersion>
+    <AssemblyVersion>2022.02.09.1</AssemblyVersion>
     <Description>Oferece códigos para facilitar a manipulação de arquivos nos projetos produzidos pela LSCode</Description>
-    <Product>LSCode.Arquivos</Product>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.6</Version>
+    <Product>LSCode.Files</Product>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Version>2.0</Version>
     <PackageIcon>LSCodePackageIcon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <FileVersion>1.6.0.0</FileVersion>
+    <FileVersion>2.0.0.0</FileVersion>
     <NeutralLanguage>pt-BR</NeutralLanguage>
     <RepositoryType>Git</RepositoryType>
-    <RepositoryUrl>https://github.com/lsantoss/LSCode.Arquivos</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/lsantoss/LSCode.Arquivos</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/lsantoss/LSCode.Files</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/lsantoss/LSCode.Files</PackageProjectUrl>
     <PackageTags>LSCode</PackageTags>
     <PackageReleaseNotes>Inclusão de documentação XML no projeto.
 Melhorias no código fonte já existente.
