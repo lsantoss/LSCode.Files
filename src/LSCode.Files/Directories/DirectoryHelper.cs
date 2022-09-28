@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LSCode.Files.Directories
 {
-    /// <summary>Helper that assists in folder manipulations.</summary>
+    /// <summary>Helper that assists in directories manipulations.</summary>
     public class DirectoryHelper : IDirectoryHelper
     {
         /// <summary>Determines whether the given path refers to an existing directory on disk.</summary>

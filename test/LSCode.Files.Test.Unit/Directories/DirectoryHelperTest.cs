@@ -6,14 +6,14 @@ using System.IO;
 
 namespace LSCode.Files.Test.Unit.Directories
 {
-    internal class DirectoryHelperTests
+    internal class DirectoryHelperTest
     {
         private readonly string testDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myTestDirectory";
         private readonly string testMovedDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myMovedTestDirectory";
 
         private readonly IDirectoryHelper _directoryHelper;
 
-        public DirectoryHelperTests() => _directoryHelper = new DirectoryHelper();
+        public DirectoryHelperTest() => _directoryHelper = new DirectoryHelper();
 
         [SetUp]
         public void SetUp()

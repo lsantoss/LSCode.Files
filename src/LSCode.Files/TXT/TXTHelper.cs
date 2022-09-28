@@ -1,4 +1,4 @@
-﻿using LSCode.Files.General;
+﻿using LSCode.Files.Files;
 using System;
 using System.IO;
 
