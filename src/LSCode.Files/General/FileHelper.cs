@@ -139,37 +139,5 @@ namespace LSCode.Files.General
                 throw ex;
             }
         }
-
-        /// <summary>Convert file to base64String in parameterized path to byte array.</summary>
-        /// <param name="filePath">Path of the file to be converted.</param>
-        /// <returns>Array de bytes with file contents.</returns>
-        /// <exception cref="Exception">Error converting file.</exception>
-        public byte[] ConvertBase64StringToByteArray(string filePath)
-        {
-            try
-            {
-                return Convert.FromBase64String(filePath);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        /// <summary>Convert file into byte array in parameterized path in a base64String.</summary>
-        /// <param name="filePath">Path of the file to be converted.</param>
-        /// <returns>Base64String with file contents.</returns>
-        /// <exception cref="Exception">Error converting file.</exception>
-        public string ConverterByteArrayToBase64String(byte[] filePath)
-        {
-            try
-            {
-                return Convert.ToBase64String(filePath);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
     }
 }

@@ -17,7 +17,7 @@ namespace LSCode.Files.TXT
         {
             try
             {
-                var streamWriter = new StreamWriter(filePath);
+                using var streamWriter = new StreamWriter(filePath);
                 streamWriter.Close();
             }
             catch (Exception ex)
