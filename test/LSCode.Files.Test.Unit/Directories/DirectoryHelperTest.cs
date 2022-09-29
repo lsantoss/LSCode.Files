@@ -8,8 +8,8 @@ namespace LSCode.Files.Test.Unit.Directories
 {
     internal class DirectoryHelperTest
     {
-        private readonly string testDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myTestDirectory";
-        private readonly string testMovedDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myMovedTestDirectory";
+        private readonly static string testDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myTestDirectory";
+        private readonly static string testMovedDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myMovedTestDirectory";
 
         private readonly IDirectoryHelper _directoryHelper;
 
