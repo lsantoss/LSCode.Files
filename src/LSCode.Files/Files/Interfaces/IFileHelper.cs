@@ -1,4 +1,6 @@
-﻿namespace LSCode.Files.Files.Interfaces
+﻿using System.Text;
+
+namespace LSCode.Files.Files.Interfaces
 {
     /// <summary>Provides contract for implementing files manipulation helper.</summary>
     public interface IFileHelper
@@ -23,5 +25,8 @@
         /// <param name="path">The file to open for reading.</param>
         /// <returns>A base64string containing the contents of the file.</returns>
         string ReadToBase64String(string path);
+
+        void Create(string path);
+        void CreateTextFile(string path, string text, Encoding encoding);
     }
 }

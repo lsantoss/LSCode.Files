@@ -3,6 +3,7 @@ using LSCode.Files.Files.Interfaces;
 using NUnit.Framework;
 using System;
 using System.IO;
+using System.Text;
 
 namespace LSCode.Files.Test.Unit.Files
 {
@@ -17,16 +18,7 @@ namespace LSCode.Files.Test.Unit.Files
         public FileHelperTest() => _fileHelper = new FileHelper();
 
         [SetUp]
-        public void SetUp()
-        {
-            Directory.CreateDirectory(testDirectory);
-
-            if (File.Exists(testFile))
-                File.Delete(testFile);
-
-            if (File.Exists(testMovedFile))
-                File.Delete(testMovedFile);
-        }
+        public void SetUp() => Directory.CreateDirectory(testDirectory);
 
         [Test]
         public void Exists_FileExists()
@@ -100,16 +92,35 @@ namespace LSCode.Files.Test.Unit.Files
             Assert.That(base64String, Is.EqualTo("RmlsZSBjb250ZW50"));
         }
 
-        [TearDown]
-        public void TearDown()
+        [Test]
+        public void Create()
         {
-            Directory.Delete(testDirectory, true);
+            _fileHelper.Create(testFile);
 
-            if (File.Exists(testFile))
-                File.Delete(testFile);
+            var exist = File.Exists(testFile);
 
-            if (File.Exists(testMovedFile))
-                File.Delete(testMovedFile);
+            Assert.That(exist, Is.True);
         }
+
+        [Test]
+        [TestCase("file.txt")]
+        [TestCase("file.cs")]
+        [TestCase("file.html")]
+        [TestCase("file.css")]
+        public void Create_WithContent_AllText(string path)
+        {
+            var testFilePath = $@"{testDirectory}\{path}";
+
+            var content = "File content";
+
+            _fileHelper.CreateTextFile(testFilePath, content, Encoding.UTF8);
+
+            var exist = File.Exists(testFilePath);
+
+            Assert.That(exist, Is.True);
+        }
+
+        [TearDown]
+        public void TearDown() => Directory.Delete(testDirectory, true);
     }
 }

@@ -29,10 +29,46 @@ namespace LSCode.Files.Files
         /// <param name="path">The file to open for reading.</param>
         /// <returns>A base64string containing the contents of the file.</returns>
         public string ReadToBase64String(string path) => Convert.ToBase64String(File.ReadAllBytes(path));
-                
+
         public void Create(string path)
         {
             using var streamWriter = new StreamWriter(path);
+            streamWriter.Close();
+        }
+
+        //recomendado txt, cs, html, css semelhantes
+        //não utilizar doc, docx, xls, xlsx, ppt, pptx, pdf e semelhantes
+        public void CreateTextFile(string path, string text, Encoding encoding)
+        {
+            using var streamWriter = new StreamWriter(path, false, encoding);
+            streamWriter.Write(text);
+            streamWriter.Close();
+        }
+
+        public async Task CreateAsync(string path, string text, Encoding encoding)
+        {
+            using var streamWriter = new StreamWriter(path, false, encoding);
+            await streamWriter.WriteAsync(text);
+            streamWriter.Close();
+        }
+
+        public void Create(string path, string[] text, Encoding encoding)
+        {
+            using var streamWriter = new StreamWriter(path, false, encoding);
+
+            foreach (var item in text)
+                streamWriter.WriteLine(item);
+
+            streamWriter.Close();
+        }
+
+        public async Task CreateAsync(string path, string[] text, Encoding encoding)
+        {
+            using var streamWriter = new StreamWriter(path, false, encoding);
+
+            foreach (var item in text)
+                await streamWriter.WriteLineAsync(item);
+
             streamWriter.Close();
         }
 
@@ -48,40 +84,6 @@ namespace LSCode.Files.Files
             using var fileStream = File.Create(path);
             await fileStream.WriteAsync(data, 0, data.Length);
             fileStream.Close();
-        }
-
-        public void Create(string path, string content, Encoding encoding)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-            streamWriter.Write(content);
-            streamWriter.Close();
-        }
-
-        public async Task CreateAsync(string path, string content, Encoding encoding)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-            await streamWriter.WriteAsync(content);
-            streamWriter.Close();
-        }
-
-        public void Create(string path, string[] content, Encoding encoding)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-
-            foreach (var item in content)
-                streamWriter.WriteLine(item);
-
-            streamWriter.Close();
-        }
-
-        public async Task CreateAsync(string path, string[] content, Encoding encoding)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-
-            foreach (var item in content)
-                await streamWriter.WriteLineAsync(item);
-
-            streamWriter.Close();
         }
 
 
