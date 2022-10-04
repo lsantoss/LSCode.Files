@@ -10,6 +10,46 @@ namespace LSCode.Files.Files
     /// <summary>Helper that assists in files manipulations.</summary>
     public static class FileHelper
     {
+        /// <summary>
+        ///     Appends text to a file, and then closes the file. If the specified file does
+        ///     not exist, this method creates a file, writes the specified text to the file,
+        ///     and then closes the file.
+        /// </summary>
+        /// <param name="path">The file to append the text. The file is created if it doesn't already exist.</param>
+        /// <param name="encoding">The character encoding to use.</param>
+        /// <param name="text">Text file content.</param>
+        public static void AppendText(string path, Encoding encoding, string text) => File.AppendAllText(path, text, encoding);
+
+        /// <summary>
+        ///     Appends text to a file, and then closes the file. If the specified file does
+        ///     not exist, this method creates a file, writes the specified text to the file,
+        ///     and then closes the file.
+        /// </summary>
+        /// <param name="path">The file to append the text. The file is created if it doesn't already exist.</param>
+        /// <param name="encoding">The character encoding to use.</param>
+        /// <param name="text">Text file content.</param>
+        public static void AppendText(string path, Encoding encoding, IEnumerable<string> text) => File.AppendAllLines(path, text, encoding);
+
+        /// <summary>
+        ///     Asynchronously appends text to a file, and then closes the file. If the specified file does
+        ///     not exist, this method creates a file, writes the specified text to the file,
+        ///     and then closes the file.
+        /// </summary>
+        /// <param name="path">The file to append the text. The file is created if it doesn't already exist.</param>
+        /// <param name="encoding">The character encoding to use.</param>
+        /// <param name="text">Text file content.</param>
+        public static async Task AppendTextAsync(string path, Encoding encoding, string text) => await File.AppendAllTextAsync(path, text, encoding);
+
+        /// <summary>
+        ///     Asynchronously appends to a file, and then closes the file. If the specified file does
+        ///     not exist, this method creates a file, writes the specified text to the file,
+        ///     and then closes the file.
+        /// </summary>
+        /// <param name="path">The file to append the text. The file is created if it doesn't already exist.</param>
+        /// <param name="encoding">The character encoding to use.</param>
+        /// <param name="text">Text file content.</param>
+        public static async Task AppendTextAsync(string path, Encoding encoding, IEnumerable<string> text) => await File.AppendAllLinesAsync(path, text, encoding);
+
         /// <summary>Compact image of the parameterized path.</summary>
         /// <remarks>Note: The original image will be replaced by the compressed image. There may be a loss of quality.</remarks>
         /// <param name="path">Path of the image to be compressed.</param>
@@ -90,26 +130,11 @@ namespace LSCode.Files.Files
         /// </summary>
         /// <param name="path">The path of the file to create.</param>
         /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="stringBuilder">Text file content.</param>
-        public static void CreateTextFile(string path, Encoding encoding, StringBuilder stringBuilder)
+        /// <param name="text">Text file content.</param>
+        public static void CreateTextFile(string path, Encoding encoding, string text)
         {
             using var streamWriter = new StreamWriter(path, false, encoding);
-            streamWriter.Write(stringBuilder.ToString());
-            streamWriter.Close();
-        }
-
-        /// <summary>
-        ///     Asynchronously creates a text file that will contain the parameterized content.
-        ///     Recommended extensions: .txt, .cs, .html, .css, .js, .json, .xml and similar.
-        ///     Extensions not recommended: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf
-        /// </summary>
-        /// <param name="path">The path of the file to create.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="stringBuilder">Text file content.</param>
-        public static async Task CreateTextFileAsync(string path, Encoding encoding, StringBuilder stringBuilder)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-            await streamWriter.WriteAsync(stringBuilder.ToString());
+            streamWriter.Write(text);
             streamWriter.Close();
         }
 
@@ -121,10 +146,13 @@ namespace LSCode.Files.Files
         /// <param name="path">The path of the file to create.</param>
         /// <param name="encoding">The character encoding to use.</param>
         /// <param name="text">Text file content.</param>
-        public static void CreateTextFile(string path, Encoding encoding, string text)
+        public static void CreateTextFile(string path, Encoding encoding, IEnumerable<string> text)
         {
             using var streamWriter = new StreamWriter(path, false, encoding);
-            streamWriter.Write(text);
+
+            foreach (var item in text)
+                streamWriter.WriteLine(item);
+
             streamWriter.Close();
         }
 
@@ -144,24 +172,6 @@ namespace LSCode.Files.Files
         }
 
         /// <summary>
-        ///     Creates a text file that will contain the parameterized content.
-        ///     Recommended extensions: .txt, .cs, .html, .css, .js, .json, .xml and similar.
-        ///     Extensions not recommended: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf
-        /// </summary>
-        /// <param name="path">The path of the file to create.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="text">Text file content.</param>
-        public static void CreateTextFile(string path, Encoding encoding, string[] text)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-
-            foreach (var item in text)
-                streamWriter.WriteLine(item);
-
-            streamWriter.Close();
-        }
-
-        /// <summary>
         ///     Asynchronously creates a text file that will contain the parameterized content.
         ///     Recommended extensions: .txt, .cs, .html, .css, .js, .json, .xml and similar.
         ///     Extensions not recommended: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf
@@ -169,43 +179,7 @@ namespace LSCode.Files.Files
         /// <param name="path">The path of the file to create.</param>
         /// <param name="encoding">The character encoding to use.</param>
         /// <param name="text">Text file content.</param>
-        public static async Task CreateTextFileAsync(string path, Encoding encoding, string[] text)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-
-            foreach (var item in text)
-                await streamWriter.WriteLineAsync(item);
-
-            streamWriter.Close();
-        }
-
-        /// <summary>
-        ///     Creates a text file that will contain the parameterized content.
-        ///     Recommended extensions: .txt, .cs, .html, .css, .js, .json, .xml and similar.
-        ///     Extensions not recommended: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf
-        /// </summary>
-        /// <param name="path">The path of the file to create.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="text">Text file content.</param>
-        public static void CreateTextFile(string path, Encoding encoding, List<string> text)
-        {
-            using var streamWriter = new StreamWriter(path, false, encoding);
-
-            foreach (var item in text)
-                streamWriter.WriteLine(item);
-
-            streamWriter.Close();
-        }
-
-        /// <summary>
-        ///     Asynchronously creates a text file that will contain the parameterized content.
-        ///     Recommended extensions: .txt, .cs, .html, .css, .js, .json, .xml and similar.
-        ///     Extensions not recommended: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf
-        /// </summary>
-        /// <param name="path">The path of the file to create.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="text">Text file content.</param>
-        public static async Task CreateTextFileAsync(string path, Encoding encoding, List<string> text)
+        public static async Task CreateTextFileAsync(string path, Encoding encoding, IEnumerable<string> text)
         {
             using var streamWriter = new StreamWriter(path, false, encoding);
 
@@ -216,8 +190,16 @@ namespace LSCode.Files.Files
         }
 
         /// <summary>Deletes the specified file.</summary>
-        /// <param name="filePath">The path of the file to be deleted. Wildcard characters are not supported.</param>
-        public static void Delete(string filePath) => File.Delete(filePath);
+        /// <param name="path">The path of the file to be deleted. Wildcard characters are not supported.</param>
+        public static void Delete(string path) => File.Delete(path);
+
+        /// <summary>Decrypts a file that was encrypted by the current account using the Encrypt(string) method.</summary>
+        /// <param name="path">A path that describes a file to decrypt.</param>
+        public static void Decrypt(string path) => File.Decrypt(path);
+
+        /// <summary>Encrypts a file so that only the account used to encrypt the file can decrypt it.</summary>
+        /// <param name="path">A path that describes a file to encrypt.</param>
+        public static void Encrypt(string path) => File.Encrypt(path);
 
         /// <summary>Determines whether the specified file exists.</summary>
         /// <param name="path">The file to check.</param>
@@ -229,6 +211,11 @@ namespace LSCode.Files.Files
         ///     returns false regardless of the existence of path.
         /// </returns>
         public static bool Exists(string path) => File.Exists(path);
+
+        /// <summary>Get information from the desired file.</summary>
+        /// <param name="path">File path to get your informations.</param>
+        /// <returns>File informations.</returns>
+        public static FileInfo Get(string path) =>  new FileInfo(path);
 
         /// <summary>Move file without possibility to overwrite if it already exists.</summary>
         /// <param name="sourcePath">The path of the file to move. Can include a relative or absolute path.</param>
