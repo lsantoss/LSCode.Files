@@ -50,7 +50,7 @@ namespace LSCode.Files.Files
         /// <param name="text">Text file content.</param>
         public static async Task AppendTextAsync(string path, Encoding encoding, IEnumerable<string> text) => await File.AppendAllLinesAsync(path, text, encoding);
 
-        /// <summary>Compact image of the parameterized path.</summary>
+        /// <summary>Compress image of the parameterized path.</summary>
         /// <remarks>Note: The original image will be replaced by the compressed image. There may be a loss of quality.</remarks>
         /// <param name="path">Path of the image to be compressed.</param>
         /// <param name="format">Image format.</param>
@@ -65,6 +65,23 @@ namespace LSCode.Files.Files
             imageMagick.ColorType = ColorType.Palette;
             imageMagick.Format = format;
             imageMagick.Write(path);
+        }
+
+        /// <summary>Asynchronously compress image of the parameterized path.</summary>
+        /// <remarks>Note: The original image will be replaced by the compressed image. There may be a loss of quality.</remarks>
+        /// <param name="path">Path of the image to be compressed.</param>
+        /// <param name="format">Image format.</param>
+        /// <param name="width">Image width.</param>
+        /// <param name="heigth">Image heigth.</param>
+        public static async Task CompressAsync(string path, MagickFormat format, int width, int heigth)
+        {
+            using var imageMagick = new MagickImage(path);
+            imageMagick.Transparent(MagickColor.FromRgb(0, 0, 0));
+            imageMagick.FilterType = FilterType.Spline;
+            imageMagick.Resize(width, heigth);
+            imageMagick.ColorType = ColorType.Palette;
+            imageMagick.Format = format;
+            await imageMagick.WriteAsync(path);
         }
 
         /// <summary>Copy file with the possibility of overwriting if it already exists.</summary>
