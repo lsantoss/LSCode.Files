@@ -12,7 +12,6 @@ namespace LSCode.Files.Test.Unit.Files
     {
         private readonly static string testDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myTestDirectory";
         private readonly static string testFile = @$"{testDirectory}\file1.txt";
-        private readonly static string testMovedFile = @$"{testDirectory}\file1.txt";
 
         [SetUp]
         public void SetUp()
@@ -328,7 +327,7 @@ namespace LSCode.Files.Test.Unit.Files
             FileHelper.Copy(testFile, testFileToCopy);
 
             var originalFileExist = File.Exists(testFile);
-            var copiedFileExist = File.Exists(testFile);
+            var copiedFileExist = File.Exists(testFileToCopy);
             var copiedFileContent = File.ReadAllText(testFileToCopy);
             
             Assert.Multiple(() =>
@@ -358,7 +357,7 @@ namespace LSCode.Files.Test.Unit.Files
             FileHelper.Copy(testFile, testFileToCopy, true);
 
             var originalFileExist = File.Exists(testFile);
-            var copiedFileExist = File.Exists(testFile);
+            var copiedFileExist = File.Exists(testFileToCopy);
             var copiedFileContent = File.ReadAllText(testFileToCopy);
 
             Assert.Multiple(() =>
@@ -574,29 +573,80 @@ namespace LSCode.Files.Test.Unit.Files
         }
 
         [Test]
-        public void ReadToBytes_EmptyFile()
+        public void Get_FileDoesNotExist()
         {
-            using var streamWriter = new StreamWriter(testFile);
-            streamWriter.Close();
+            var fileInfo = FileHelper.Get(testFile);
 
-            var bytes = FileHelper.ReadToBytes(testFile);
-
-            Assert.That(bytes, Is.Empty);
+            Assert.Multiple(() =>
+            {
+                Assert.That(fileInfo.Exists, Is.False);
+                Assert.That(fileInfo.Name, Is.EqualTo("file1.txt"));
+            });
         }
 
         [Test]
-        public void ReadToBytes_FileWithContent()
+        public void Get_FileExists()
         {
-            var content = "File content";
-
             using var streamWriter = new StreamWriter(testFile);
-            streamWriter.Write(content);
             streamWriter.Close();
 
-            var bytes = FileHelper.ReadToBytes(testFile);
+            var fileInfo = FileHelper.Get(testFile);
+            
+            Assert.Multiple(() =>
+            {
+                Assert.That(fileInfo.Exists, Is.True);
+                Assert.That(fileInfo.Name, Is.EqualTo("file1.txt"));
+                Assert.That(fileInfo.Length, Is.Zero);
+            });
+        }
 
-            Assert.That(bytes, Is.Not.Empty);
-            Assert.That(bytes, Has.Length.EqualTo(12));
+        [Test]
+        public void Move()
+        {
+            var testFileToMove = @$"{testDirectory}\newPath\fileMoved.txt";
+            var text = "File content";
+
+            Directory.CreateDirectory(@$"{testDirectory}\newPath");
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(text);
+            streamWriter.Close();
+
+            FileHelper.Move(testFile, testFileToMove);
+
+            var originalFileExist = File.Exists(testFile);
+            var movedFileExist = File.Exists(testFileToMove);
+            var movedFileContent = File.ReadAllText(testFileToMove);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(originalFileExist, Is.False);
+                Assert.That(movedFileExist, Is.True);
+                Assert.That(movedFileContent, Is.EqualTo(text));
+            });
+        }
+
+        [Test]
+        public void Open()
+        {
+            var text = "File content";
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            using var fileStream = FileHelper.Open(testFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            var info = new UTF8Encoding(true).GetBytes(text);
+            fileStream.Write(info, 0, info.Length);
+            fileStream.Close();
+
+            var exist = File.Exists(testFile);
+            var content = File.ReadAllText(testFile);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(exist, Is.True);
+                Assert.That(content, Is.EqualTo(text));
+            });
         }
 
         [Test]
@@ -624,6 +674,187 @@ namespace LSCode.Files.Test.Unit.Files
             Assert.That(base64String, Is.Not.Empty);
             Assert.That(base64String, Has.Length.EqualTo(16));
             Assert.That(base64String, Is.EqualTo("RmlsZSBjb250ZW50"));
+        }
+
+        [Test]
+        public async Task ReadToBase64StringAsync_EmptyFile()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            var bytes = await FileHelper.ReadToBase64StringAsync(testFile);
+
+            Assert.That(bytes, Is.Empty);
+        }
+
+        [Test]
+        public async Task ReadToBase64StringAsync_FileWithContent()
+        {
+            var content = "File content";
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(content);
+            streamWriter.Close();
+
+            var base64String = await FileHelper.ReadToBase64StringAsync(testFile);
+
+            Assert.That(base64String, Is.Not.Empty);
+            Assert.That(base64String, Has.Length.EqualTo(16));
+            Assert.That(base64String, Is.EqualTo("RmlsZSBjb250ZW50"));
+        }
+
+        [Test]
+        public void ReadToBytes_EmptyFile()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            var bytes = FileHelper.ReadToBytes(testFile);
+
+            Assert.That(bytes, Is.Empty);
+        }
+
+        [Test]
+        public void ReadToBytes_FileWithContent()
+        {
+            var content = "File content";
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(content);
+            streamWriter.Close();
+
+            var bytes = FileHelper.ReadToBytes(testFile);
+
+            Assert.That(bytes, Is.Not.Empty);
+            Assert.That(bytes, Has.Length.EqualTo(12));
+        }
+
+        [Test]
+        public async Task ReadToBytesAsync_EmptyFile()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            var bytes = await FileHelper.ReadToBytesAsync(testFile);
+
+            Assert.That(bytes, Is.Empty);
+        }
+
+        [Test]
+        public async Task ReadToBytesAsync_FileWithContent()
+        {
+            var content = "File content";
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(content);
+            streamWriter.Close();
+
+            var bytes = await FileHelper.ReadToBytesAsync(testFile);
+
+            Assert.That(bytes, Is.Not.Empty);
+            Assert.That(bytes, Has.Length.EqualTo(12));
+        }
+
+        [Test]
+        public void ReadLines_EmptyFile()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            var content = FileHelper.ReadLines(testFile);
+
+            Assert.That(content, Is.Empty);
+        }
+
+        [Test]
+        public void ReadLines_FileWithContent()
+        {
+            string[] text = { "File content", "File content" };
+
+            using var streamWriter = new StreamWriter(testFile);
+            foreach (var line in text)
+                streamWriter.WriteLine(line);
+            streamWriter.Close();
+
+            var content = FileHelper.ReadLines(testFile);
+
+            Assert.That(content, Is.EqualTo(text));
+        }
+
+        [Test]
+        public async Task ReadLinesAsync_EmptyFile()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            var content = await FileHelper.ReadLinesAsync(testFile);
+
+            Assert.That(content, Is.Empty);
+        }
+
+        [Test]
+        public async Task ReadLinesAsync_FileWithContent()
+        {
+            string[] text = { "File content", "File content" };
+
+            using var streamWriter = new StreamWriter(testFile);
+            foreach (var line in text)
+                streamWriter.WriteLine(line);
+            streamWriter.Close();
+
+            var content = await FileHelper.ReadLinesAsync(testFile);
+
+            Assert.That(content, Is.EqualTo(text));
+        }
+
+        [Test]
+        public void ReadText_EmptyFile()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            var content = FileHelper.ReadText(testFile);
+
+            Assert.That(content, Is.Empty);
+        }
+
+        [Test]
+        public void ReadText_FileWithContent()
+        {
+            var text = "File content";
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(text);
+            streamWriter.Close();
+
+            var content = FileHelper.ReadText(testFile);
+
+            Assert.That(content, Is.EqualTo(text));
+        }
+
+        [Test]
+        public async Task ReadTextAsync_EmptyFile()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            var content = await FileHelper.ReadTextAsync(testFile);
+
+            Assert.That(content, Is.Empty);
+        }
+
+        [Test]
+        public async Task ReadTextAsync_FileWithContent()
+        {
+            var text = "File content";
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(text);
+            streamWriter.Close();
+
+            var content = await FileHelper.ReadTextAsync(testFile);
+
+            Assert.That(content, Is.EqualTo(text));
         }
 
         [TearDown]

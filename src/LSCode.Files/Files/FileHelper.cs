@@ -286,13 +286,5 @@ namespace LSCode.Files.Files
         /// <param name="path">The file to open for reading.</param>
         /// <returns>A string containing all the text in the file.</returns>
         public static async Task<string> ReadTextAsync(string path) => await File.ReadAllTextAsync(path);
-
-        /// <summary>Replaces the contents of a specified file with the contents of another file, deleting the original file, and creating a backup of the replaced file and optionally ignores merge errors.</summary>
-        /// <param name="sourceFileName">The name of a file that replaces the file specified by destinationFileName.</param>
-        /// <param name="destinationFileName">The name of the file being replaced.</param>
-        /// <param name="destinationBackupFileName">The name of the backup file.</param>
-        /// <param name="ignoreMetadataErrors">true to ignore merge errors (such as attributes and access control lists (ACLs)) from the replaced file to the replacement file; otherwise, false.</param>
-        /// <returns>A string containing all the text in the file.</returns>
-        public static void Replace(string sourceFileName, string destinationFileName, string destinationBackupFileName, bool ignoreMetadataErrors) => File.Replace(sourceFileName, destinationFileName, destinationBackupFileName, ignoreMetadataErrors);
     }
 }
