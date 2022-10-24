@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -210,13 +211,58 @@ namespace LSCode.Files.Files
         /// <param name="path">The path of the file to be deleted. Wildcard characters are not supported.</param>
         public static void Delete(string path) => File.Delete(path);
 
-        /// <summary>Decrypts a file that was encrypted by the current account using the Encrypt(string) method.</summary>
-        /// <param name="path">A path that describes a file to decrypt.</param>
-        public static void Decrypt(string path) => File.Decrypt(path);
+        /// <summary>Decrypts the desired file, replacing the original file with the encrypted version.</summary>
+        /// <param name="sourcePath">A path that describes a file to encrypt.</param>
+        /// <param name="secret">Key to encrypt and decrypt the file.</param>
+        public static void Decrypt(string sourcePath, string secret)
+        {
+            var secretBytes = new UnicodeEncoding().GetBytes(secret);
 
-        /// <summary>Encrypts a file so that only the account used to encrypt the file can decrypt it.</summary>
-        /// <param name="path">A path that describes a file to encrypt.</param>
-        public static void Encrypt(string path) => File.Encrypt(path);
+            using var fileStream = new FileStream(sourcePath, FileMode.Open);
+
+            using var RMCrypto = new RijndaelManaged();
+
+            using var cryptoStream = new CryptoStream(fileStream, RMCrypto.CreateDecryptor(secretBytes, secretBytes), CryptoStreamMode.Read);
+
+            int data;
+            var fileBytes = new List<byte>();
+            while ((data = cryptoStream.ReadByte()) != -1)
+                fileBytes.Add((byte)data);
+
+            cryptoStream.Close();
+
+            fileStream.Close();
+
+            using var fileStreamOut = new FileStream(sourcePath, FileMode.Create);
+
+            foreach (var item in fileBytes)
+                fileStreamOut.WriteByte(item);
+
+            fileStreamOut.Close();
+        }
+
+        /// <summary>Encrypts desired file, replacing the original file with the encrypted version.</summary>
+        /// <param name="sourcePath">A path that describes a file to encrypt.</param>
+        /// <param name="secret">Key to encrypt and decrypt the file.</param>
+        public static void Encrypt(string sourcePath, string secret)
+        {
+            var fileBytes = File.ReadAllBytes(sourcePath);
+
+            var secretBytes = new UnicodeEncoding().GetBytes(secret);
+
+            using var fileStream = new FileStream(sourcePath, FileMode.Create);
+
+            using var RMCrypto = new RijndaelManaged();
+
+            using var cryptoStream = new CryptoStream(fileStream, RMCrypto.CreateEncryptor(secretBytes, secretBytes), CryptoStreamMode.Write);
+            
+            foreach (byte b in fileBytes)
+                cryptoStream.WriteByte(b);
+
+            cryptoStream.Close();
+
+            fileStream.Close();
+        }
 
         /// <summary>Determines whether the specified file exists.</summary>
         /// <param name="path">The file to check.</param>

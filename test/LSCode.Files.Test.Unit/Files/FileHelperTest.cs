@@ -544,13 +544,66 @@ namespace LSCode.Files.Test.Unit.Files
         [Test]
         public void Decrypt()
         {
+            var text = "File content";
 
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(text);
+            streamWriter.Close();
+
+            FileHelper.Encrypt(testFile, "myKey123");
+
+            var exist = File.Exists(testFile);
+            var content = File.ReadAllText(testFile);
+            var bytes = File.ReadAllBytes(testFile);
+            var base64String = Convert.ToBase64String(bytes);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(exist, Is.True);
+                Assert.That(content, Is.EqualTo("�\u0002��Yı\r��I�(\u00194"));
+                Assert.That(bytes.Length, Is.EqualTo(16));
+                Assert.That(base64String, Is.EqualTo("5L4CpfZZxLENsOpJjCgZNA=="));
+            });
+
+            FileHelper.Decrypt(testFile, "myKey123");
+
+            var existDecrypt = File.Exists(testFile);
+            var contentDecrypt = File.ReadAllText(testFile);
+            var bytesDecrypt = File.ReadAllBytes(testFile);
+            var base64StringDecrypt = Convert.ToBase64String(bytesDecrypt);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(existDecrypt, Is.True);
+                Assert.That(contentDecrypt, Is.EqualTo(text));
+                Assert.That(bytesDecrypt.Length, Is.EqualTo(12));
+                Assert.That(base64StringDecrypt, Is.EqualTo("RmlsZSBjb250ZW50"));
+            });
         }
 
         [Test]
-        public void Exists()
+        public void Encrypt()
         {
-            
+            var text = "File content";
+
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Write(text);
+            streamWriter.Close();
+
+            FileHelper.Encrypt(testFile, "myKey123");
+
+            var exist = File.Exists(testFile);
+            var content = File.ReadAllText(testFile);
+            var bytes = File.ReadAllBytes(testFile);
+            var base64String = Convert.ToBase64String(bytes);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(exist, Is.True);
+                Assert.That(content, Is.EqualTo("�\u0002��Yı\r��I�(\u00194"));
+                Assert.That(bytes.Length, Is.EqualTo(16));
+                Assert.That(base64String, Is.EqualTo("5L4CpfZZxLENsOpJjCgZNA=="));
+            });
         }
 
         [Test]
@@ -655,25 +708,25 @@ namespace LSCode.Files.Test.Unit.Files
             using var streamWriter = new StreamWriter(testFile);
             streamWriter.Close();
 
-            var bytes = FileHelper.ReadToBase64String(testFile);
+            var content = FileHelper.ReadToBase64String(testFile);
 
-            Assert.That(bytes, Is.Empty);
+            Assert.That(content, Is.Empty);
         }
 
         [Test]
         public void ReadToBase64String_FileWithContent()
         {
-            var content = "File content";
+            var text = "File content";
 
             using var streamWriter = new StreamWriter(testFile);
-            streamWriter.Write(content);
+            streamWriter.Write(text);
             streamWriter.Close();
 
-            var base64String = FileHelper.ReadToBase64String(testFile);
+            var content = FileHelper.ReadToBase64String(testFile);
 
-            Assert.That(base64String, Is.Not.Empty);
-            Assert.That(base64String, Has.Length.EqualTo(16));
-            Assert.That(base64String, Is.EqualTo("RmlsZSBjb250ZW50"));
+            Assert.That(content, Is.Not.Empty);
+            Assert.That(content, Has.Length.EqualTo(16));
+            Assert.That(content, Is.EqualTo("RmlsZSBjb250ZW50"));
         }
 
         [Test]
@@ -682,25 +735,25 @@ namespace LSCode.Files.Test.Unit.Files
             using var streamWriter = new StreamWriter(testFile);
             streamWriter.Close();
 
-            var bytes = await FileHelper.ReadToBase64StringAsync(testFile);
+            var content = await FileHelper.ReadToBase64StringAsync(testFile);
 
-            Assert.That(bytes, Is.Empty);
+            Assert.That(content, Is.Empty);
         }
 
         [Test]
         public async Task ReadToBase64StringAsync_FileWithContent()
         {
-            var content = "File content";
+            var text = "File content";
 
             using var streamWriter = new StreamWriter(testFile);
-            streamWriter.Write(content);
+            streamWriter.Write(text);
             streamWriter.Close();
 
-            var base64String = await FileHelper.ReadToBase64StringAsync(testFile);
+            var content = await FileHelper.ReadToBase64StringAsync(testFile);
 
-            Assert.That(base64String, Is.Not.Empty);
-            Assert.That(base64String, Has.Length.EqualTo(16));
-            Assert.That(base64String, Is.EqualTo("RmlsZSBjb250ZW50"));
+            Assert.That(content, Is.Not.Empty);
+            Assert.That(content, Has.Length.EqualTo(16));
+            Assert.That(content, Is.EqualTo("RmlsZSBjb250ZW50"));
         }
 
         [Test]
@@ -709,24 +762,24 @@ namespace LSCode.Files.Test.Unit.Files
             using var streamWriter = new StreamWriter(testFile);
             streamWriter.Close();
 
-            var bytes = FileHelper.ReadToBytes(testFile);
+            var content = FileHelper.ReadToBytes(testFile);
 
-            Assert.That(bytes, Is.Empty);
+            Assert.That(content, Is.Empty);
         }
 
         [Test]
         public void ReadToBytes_FileWithContent()
         {
-            var content = "File content";
+            var text = "File content";
 
             using var streamWriter = new StreamWriter(testFile);
-            streamWriter.Write(content);
+            streamWriter.Write(text);
             streamWriter.Close();
 
-            var bytes = FileHelper.ReadToBytes(testFile);
+            var content = FileHelper.ReadToBytes(testFile);
 
-            Assert.That(bytes, Is.Not.Empty);
-            Assert.That(bytes, Has.Length.EqualTo(12));
+            Assert.That(content, Is.Not.Empty);
+            Assert.That(content, Has.Length.EqualTo(12));
         }
 
         [Test]
@@ -735,24 +788,24 @@ namespace LSCode.Files.Test.Unit.Files
             using var streamWriter = new StreamWriter(testFile);
             streamWriter.Close();
 
-            var bytes = await FileHelper.ReadToBytesAsync(testFile);
+            var content = await FileHelper.ReadToBytesAsync(testFile);
 
-            Assert.That(bytes, Is.Empty);
+            Assert.That(content, Is.Empty);
         }
 
         [Test]
         public async Task ReadToBytesAsync_FileWithContent()
         {
-            var content = "File content";
+            var text = "File content";
 
             using var streamWriter = new StreamWriter(testFile);
-            streamWriter.Write(content);
+            streamWriter.Write(text);
             streamWriter.Close();
 
-            var bytes = await FileHelper.ReadToBytesAsync(testFile);
+            var content = await FileHelper.ReadToBytesAsync(testFile);
 
-            Assert.That(bytes, Is.Not.Empty);
-            Assert.That(bytes, Has.Length.EqualTo(12));
+            Assert.That(content, Is.Not.Empty);
+            Assert.That(content, Has.Length.EqualTo(12));
         }
 
         [Test]
