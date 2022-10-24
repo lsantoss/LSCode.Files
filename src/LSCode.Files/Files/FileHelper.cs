@@ -222,6 +222,14 @@ namespace LSCode.Files.Files
         /// <param name="destinationPath">The new path and name for the file.</param>
         public static void Move(string sourcePath, string destinationPath) => File.Move(sourcePath, destinationPath);
 
+        /// <summary>Opens a FileStream on the specified path, having the specified mode with read, write, or read/write access and the specified sharing option.</summary>
+        /// <param name="path">The file to open.</param>
+        /// <param name="mode">A FileMode value that specifies whether a file is created if one does not exist, and determines whether the contents of existing files are retained or overwritten.</param>
+        /// <param name="access">A FileAccess value that specifies the operations that can be performed on the file.</param>
+        /// <param name="share">A FileShare value specifying the type of access other threads have to the file.</param>
+        /// <returns>A FileStream on the specified path, having the specified mode with read, write, or read/write access and the specified sharing option.</returns>
+        public static FileStream Open(string path, FileMode mode, FileAccess access, FileShare share) => File.Open(path, mode, access, share);
+
         /// <summary>Opens a binary file, reads the contents of the file into a base64string, and then closes the file.</summary>
         /// <param name="path">The file to open for reading.</param>
         /// <returns>A base64string containing the contents of the file.</returns>
@@ -241,5 +249,33 @@ namespace LSCode.Files.Files
         /// <param name="path">The file to open for reading.</param>
         /// <returns>A byte array containing the contents of the file.</returns>
         public static async Task<byte[]> ReadToBytesAsync(string path) => await File.ReadAllBytesAsync(path);
+
+        /// <summary>Opens a text file, reads all lines of the file, and then closes the file.</summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string array containing all lines of the file.</returns>
+        public static string[] ReadLines(string path) => File.ReadAllLines(path);
+
+        /// <summary>Asynchronously opens a text file, reads all lines of the file, and then closes the file.</summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string array containing all lines of the file.</returns>
+        public static async Task<string[]> ReadLinesAsync(string path) => await File.ReadAllLinesAsync(path);
+
+        /// <summary>Opens a text file, reads all the text in the file, and then closes the file.</summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string containing all the text in the file.</returns>
+        public static string ReadText(string path) => File.ReadAllText(path);
+
+        /// <summary>Asynchronously opens a text file, reads all the text in the file, and then closes the file.</summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string containing all the text in the file.</returns>
+        public static async Task<string> ReadTextAsync(string path) => await File.ReadAllTextAsync(path);
+
+        /// <summary>Replaces the contents of a specified file with the contents of another file, deleting the original file, and creating a backup of the replaced file and optionally ignores merge errors.</summary>
+        /// <param name="sourceFileName">The name of a file that replaces the file specified by destinationFileName.</param>
+        /// <param name="destinationFileName">The name of the file being replaced.</param>
+        /// <param name="destinationBackupFileName">The name of the backup file.</param>
+        /// <param name="ignoreMetadataErrors">true to ignore merge errors (such as attributes and access control lists (ACLs)) from the replaced file to the replacement file; otherwise, false.</param>
+        /// <returns>A string containing all the text in the file.</returns>
+        public static void Replace(string sourceFileName, string destinationFileName, string destinationBackupFileName, bool ignoreMetadataErrors) => File.Replace(sourceFileName, destinationFileName, destinationBackupFileName, ignoreMetadataErrors);
     }
 }
