@@ -329,13 +329,13 @@ namespace LSCode.Files.Test.Unit.Files
 
             var originalFileExist = File.Exists(testFile);
             var copiedFileExist = File.Exists(testFile);
-            var copiedFileText = File.ReadAllText(testFileToCopy);
+            var copiedFileContent = File.ReadAllText(testFileToCopy);
             
             Assert.Multiple(() =>
             {
                 Assert.That(originalFileExist, Is.True);
                 Assert.That(copiedFileExist, Is.True);
-                Assert.That(copiedFileText, Is.EqualTo(text));
+                Assert.That(copiedFileContent, Is.EqualTo(text));
             });
         }
 
@@ -359,13 +359,13 @@ namespace LSCode.Files.Test.Unit.Files
 
             var originalFileExist = File.Exists(testFile);
             var copiedFileExist = File.Exists(testFile);
-            var copiedFileText = File.ReadAllText(testFileToCopy);
+            var copiedFileContent = File.ReadAllText(testFileToCopy);
 
             Assert.Multiple(() =>
             {
                 Assert.That(originalFileExist, Is.True);
                 Assert.That(copiedFileExist, Is.True);
-                Assert.That(copiedFileText, Is.EqualTo(text));
+                Assert.That(copiedFileContent, Is.EqualTo(text));
             });
         }
 
@@ -462,21 +462,96 @@ namespace LSCode.Files.Test.Unit.Files
         }
 
         [Test]
-        [TestCase("file.txt")]
-        [TestCase("file.cs")]
-        [TestCase("file.html")]
-        [TestCase("file.css")]
-        public void Create_WithContent_AllText(string fileName)
+        public void CreateTextFile_TextAsString()
         {
-            var testFilePath = $@"{testDirectory}\{fileName}";
+            var text = "File content";
 
-            var content = "File content";
+            FileHelper.CreateTextFile(testFile, Encoding.UTF8, text);
 
-            FileHelper.CreateTextFile(testFilePath, Encoding.UTF8, content);
+            var exist = File.Exists(testFile);
+            var content = File.ReadAllText(testFile);
 
-            var exist = File.Exists(testFilePath);
+            Assert.Multiple(() =>
+            {
+                Assert.That(exist, Is.True);
+                Assert.That(content, Is.EqualTo(text));
+            });
+        }
 
-            Assert.That(exist, Is.True);
+        [Test]
+        public void CreateTextFile_TextAsListofString()
+        {
+            string[] text = { "File content", "File content" };
+
+            FileHelper.CreateTextFile(testFile, Encoding.UTF8, text);
+
+            var exist = File.Exists(testFile);
+            var content = File.ReadAllLines(testFile);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(exist, Is.True);
+                Assert.That(content, Is.EqualTo(text));
+            });
+        }
+
+        [Test]
+        public async Task CreateTextFileAsync_TextAsString()
+        {
+            var text = "File content";
+
+            await FileHelper.CreateTextFileAsync(testFile, Encoding.UTF8, text);
+
+            var exist = File.Exists(testFile);
+            var content = File.ReadAllText(testFile);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(exist, Is.True);
+                Assert.That(content, Is.EqualTo(text));
+            });
+        }
+
+        [Test]
+        public async Task CreateTextFileAsync_TextAsListofString()
+        {
+            string[] text = { "File content", "File content" };
+
+            await FileHelper.CreateTextFileAsync(testFile, Encoding.UTF8, text);
+
+            var exist = File.Exists(testFile);
+            var content = File.ReadAllLines(testFile);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(exist, Is.True);
+                Assert.That(content, Is.EqualTo(text));
+            });
+        }
+
+        [Test]
+        public void Delete()
+        {
+            using var streamWriter = new StreamWriter(testFile);
+            streamWriter.Close();
+
+            FileHelper.Delete(testFile);
+
+            var exist = File.Exists(testFile);
+
+            Assert.That(exist, Is.False);
+        }
+
+        [Test]
+        public void Decrypt()
+        {
+
+        }
+
+        [Test]
+        public void Exists()
+        {
+            
         }
 
         [Test]
