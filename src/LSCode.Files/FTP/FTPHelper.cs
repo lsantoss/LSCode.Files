@@ -1,11 +1,13 @@
-﻿using System;
+﻿using LSCode.Files.FTP.Interfaces;
+using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace LSCode.Files.FTP
 {
     /// <summary>Helper that assists in the manipulation of directories and files through FTP.</summary>
-    public class FTPHelper
+    public class FTPHelper : IFTPHelper
     {
         /// <value>User used for the connection.</value>
         public string User { get; private set; }
@@ -23,18 +25,57 @@ namespace LSCode.Files.FTP
             Password = password;
         }
 
-        /// <summary>Checks if a directory exists in the given path.</summary>
-        /// <param name="directoryPath">Directory path to be checked.</param>
-        /// <returns>True if it exists or False if it doesn't exist.</returns>
-        public bool DirectoryExists(string directoryPath)
+        /// <summary>Creates a directory in the parameterized path.</summary>
+        /// <param name="path">The directory path to be create.</param>
+        public void CreateDirectory(string path)
         {
-            var request = (FtpWebRequest)WebRequest.Create(directoryPath);
-            request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+            var request = WebRequest.Create(path) as FtpWebRequest;
             request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.GetResponse();
+        }
 
+        /// <summary>Asynchronously creates a directory in the parameterized path.</summary>
+        /// <param name="path">The directory path to be create.</param>
+        public async Task CreateDirectoryAsync(string path)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            await request.GetResponseAsync();
+        }
+
+        /// <summary>Deletes a directory in parameterized path.</summary>
+        /// <param name="path">The directory path to be deleted.</param>
+        public void DeleteDirectory(string path)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.RemoveDirectory;
+            request.GetResponse();
+        }
+
+        /// <summary>Asynchronously deletes a directory in parameterized path.</summary>
+        /// <param name="path">The directory path to be deleted.</param>
+        public async Task DeleteDirectoryAsync(string path)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.RemoveDirectory;
+            await request.GetResponseAsync();
+        }
+
+        /// <summary>Determines whether the given path refers to an existing directory.</summary>
+        /// <param name="path">Directory path to be checked.</param>
+        /// <returns>True if path refers to an existing directory; false if the directory does not exist.</returns>
+        public bool DirectoryExists(string path)
+        {
             try
             {
-                _ = (FtpWebResponse)request.GetResponse();
+                var request = WebRequest.Create(path) as FtpWebRequest;
+                request.Credentials = new NetworkCredential(User, Password);
+                request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                request.GetResponse();
                 return true;
             }
             catch
@@ -43,58 +84,37 @@ namespace LSCode.Files.FTP
             }
         }
 
-        /// <summary>Creates directory in the parameterized path.</summary>
-        /// <param name="directoryPath">Path of the directory that will be created.</param>
-        /// <exception cref="Exception">Error creating directory.</exception>
-        public void CreateDirectory(string directoryPath)
+        /// <summary>Asynchronously determines whether the given path refers to an existing directory.</summary>
+        /// <param name="path">Directory path to be checked.</param>
+        /// <returns>True if path refers to an existing directory; false if the directory does not exist.</returns>
+        public async Task<bool> DirectoryExistsAsync(string path)
         {
             try
             {
-                var request = (FtpWebRequest)WebRequest.Create(directoryPath);
-                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                var request = WebRequest.Create(path) as FtpWebRequest;
                 request.Credentials = new NetworkCredential(User, Password);
-                _ = (FtpWebResponse)request.GetResponse();
+                request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                await request.GetResponseAsync();
+                return true;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
-            }
-        }
-
-        /// <summary>Delete directory in parameterized path.</summary>
-        /// <param name="directoryPath">Directory path to be deleted.</param>
-        /// <exception cref="Exception">Error deleting directory.</exception>
-        public void DeleteDirectory(string directoryPath)
-        {
-            try
-            {
-                var request = (FtpWebRequest)WebRequest.Create(directoryPath);
-                request.Method = WebRequestMethods.Ftp.RemoveDirectory;
-                request.Credentials = new NetworkCredential(User, Password);
-                _ = (FtpWebResponse)request.GetResponse();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                return false;
             }
         }
 
         /// <summary>Checks if a file exists in the parameterized path.</summary>
-        /// <param name="directoryPath">Directory path.</param>
-        /// <param name="fileName">Name of the file to be verified.</param>
-        /// <returns>True if it exists or False if it doesn't exist.</returns>
-        public bool FileExists(string directoryPath, string fileName)
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>True if path refers to an existing file; false if the file does not exist.</returns>
+        public bool FileExists(string path)
         {
             try
             {
-                var request = (FtpWebRequest)WebRequest.Create(directoryPath);
-                request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                var request = WebRequest.Create(path) as FtpWebRequest;
                 request.Credentials = new NetworkCredential(User, Password);
-
-                var ftpResponse = (FtpWebResponse)request.GetResponse();
-
-                var reader = new StreamReader(ftpResponse.GetResponseStream());
-                return reader.ReadToEnd().Contains(fileName);
+                request.Method = WebRequestMethods.Ftp.GetFileSize;
+                request.GetResponse();
+                return true;
             }
             catch
             {
@@ -105,54 +125,38 @@ namespace LSCode.Files.FTP
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="filePathToUpload">Path of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        /// <exception cref="Exception">Error uploading file.</exception>
         public void UploadFile(string filePathToUpload, string destinationFolderPath)
         {
-            try
-            {
-                var fileStream = File.OpenRead(filePathToUpload);
+            var fileStream = File.OpenRead(filePathToUpload);
 
-                var buffer = new byte[fileStream.Length];
+            var buffer = new byte[fileStream.Length];
 
-                fileStream.Read(buffer, 0, buffer.Length);
+            fileStream.Read(buffer, 0, buffer.Length);
 
-                var uri = new Uri(destinationFolderPath);
+            var uri = new Uri(destinationFolderPath);
 
-                var request = (FtpWebRequest)WebRequest.Create(uri);
-                request.Credentials = new NetworkCredential(User, Password);
-                request.KeepAlive = false;
-                request.Method = WebRequestMethods.Ftp.UploadFile;
-                request.UseBinary = true;
-                request.ContentLength = buffer.Length;
+            var request = (FtpWebRequest)WebRequest.Create(uri);
+            request.Credentials = new NetworkCredential(User, Password);
+            request.KeepAlive = false;
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+            request.UseBinary = true;
+            request.ContentLength = buffer.Length;
 
-                var stream = request.GetRequestStream();
-                stream.Write(buffer, 0, buffer.Length);
-                stream.Close();
+            var stream = request.GetRequestStream();
+            stream.Write(buffer, 0, buffer.Length);
+            stream.Close();
 
-                fileStream.Close();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            fileStream.Close();
         }
 
         /// <summary>Delete file in parameterized path.</summary>
         /// <param name="filePath">Path of the file to be deleted.</param>
-        /// <exception cref="Exception">Error deleting file.</exception>
         public void DeleteFile(string filePath)
         {
-            try
-            {
-                var request = (FtpWebRequest)WebRequest.Create(filePath);
-                request.Credentials = new NetworkCredential(User, Password);
-                request.Method = WebRequestMethods.Ftp.DeleteFile;
-                _ = (FtpWebResponse)request.GetResponse();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var request = (FtpWebRequest)WebRequest.Create(filePath);
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.DeleteFile;
+            _ = (FtpWebResponse)request.GetResponse();
         }
     }
 }

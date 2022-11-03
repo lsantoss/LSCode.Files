@@ -7,8 +7,8 @@ namespace LSCode.Files.Directories
     /// <summary>Helper that assists in directories manipulations.</summary>
     public static class DirectoryHelper
     {
-        /// <summary>Create directory in parameterized path.</summary>
-        /// <param name="path">The directory to create.</param>
+        /// <summary>Creates directory in parameterized path.</summary>
+        /// <param name="path">The directory path to create.</param>
         /// <returns>An object that represents the directory at the specified path. This object is returned regardless of whether a directory at the specified path already exists.</returns>
         public static DirectoryInfo Create(string path) => Directory.CreateDirectory(path);
 
