@@ -11,6 +11,30 @@ namespace LSCode.Files.FTP.Interfaces
         /// <value>Password used for the connection.</value>
         public string Password { get; }
 
+        /// <summary>Creates a directory in the parameterized path.</summary>
+        /// <param name="path">The directory path to be create.</param>
+        void CreateDirectory(string path);
+
+        /// <summary>Asynchronously creates a directory in the parameterized path.</summary>
+        /// <param name="path">The directory path to be create.</param>
+        Task CreateDirectoryAsync(string path);
+
+        /// <summary>Deletes a directory in parameterized path.</summary>
+        /// <param name="path">The directory path to be deleted.</param>
+        void DeleteDirectory(string path);
+
+        /// <summary>Asynchronously deletes a directory in parameterized path.</summary>
+        /// <param name="path">The directory path to be deleted.</param>
+        Task DeleteDirectoryAsync(string path);
+
+        /// <summary>Delete file in parameterized path.</summary>
+        /// <param name="path">Path of the file to be deleted.</param>
+        void DeleteFile(string path);
+
+        /// <summary>Asynchronously delete file in parameterized path.</summary>
+        /// <param name="path">Path of the file to be deleted.</param>
+        Task DeleteFileAsync(string path);
+
         /// <summary>Determines whether the given path refers to an existing directory.</summary>
         /// <param name="path">Directory path to be checked.</param>
         /// <returns>True if path refers to an existing directory; false if the directory does not exist.</returns>
@@ -21,20 +45,16 @@ namespace LSCode.Files.FTP.Interfaces
         /// <returns>True if path refers to an existing directory; false if the directory does not exist.</returns>
         Task<bool> DirectoryExistsAsync(string path);
 
-        /// <summary>Creates a directory in the parameterized path.</summary>
-        /// <param name="path">The directory path to be create.</param>
-        public void CreateDirectory(string path);
+        /// <summary>Determines whether the specified file exists.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>True if path refers to an existing file; False if the file does not exist.</returns>
+        bool FileExists(string path);
 
-        /// <summary>Asynchronously creates a directory in the parameterized path.</summary>
-        /// <param name="path">The directory path to be create.</param>
-        Task CreateDirectoryAsync(string path);
+        /// <summary>Asynchronously determines whether the specified file exists.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>True if path refers to an existing file; False if the file does not exist.</returns>
+        Task<bool> FileExistsAsync(string path);
 
-        /// <summary>Deletes a directory in parameterized path.</summary>
-        /// <param name="path">The directory path to be deleted.</param>
-        public void DeleteDirectory(string path);
-
-        /// <summary>Asynchronously deletes a directory in parameterized path.</summary>
-        /// <param name="path">The directory path to be deleted.</param>
-        Task DeleteDirectoryAsync(string path);
+        void UploadFile(string filePathToUpload, string destinationFolderPath);
     }
 }
