@@ -223,6 +223,62 @@ namespace LSCode.Files.Test.Unit.FTP
         }
 
         [Test]
+        public void DownloadFile_FileExists()
+        {
+            //Arrange
+            using var streamWriter = new StreamWriter(binFtpTestFile);
+            streamWriter.Write("test");
+            streamWriter.Close();
+
+            _fTPHelper.UploadFileFromPath(binFtpTestFile, ftpTestFile);
+
+            File.Delete(binFtpTestFile);
+
+            //Act
+            _fTPHelper.DownloadFile(ftpTestFile, binFtpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void DownloadFile_FileDoesNotExist()
+        {
+            //Assert
+            Assert.Throws<WebException>(() => _fTPHelper.DownloadFile(ftpTestFile, binFtpTestFile));
+        }
+
+        [Test]
+        public async Task DownloadFileAsync_FileExists()
+        {
+            //Arrange
+            using var streamWriter = new StreamWriter(binFtpTestFile);
+            streamWriter.Write("test");
+            streamWriter.Close();
+
+            _fTPHelper.UploadFileFromPath(binFtpTestFile, ftpTestFile);
+
+            File.Delete(binFtpTestFile);
+
+            //Act
+            await _fTPHelper.DownloadFileAsync(ftpTestFile, binFtpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void DownloadFileAsync_FileDoesNotExist()
+        {
+            //Assert
+            Assert.ThrowsAsync<WebException>(() => _fTPHelper.DownloadFileAsync(ftpTestFile, binFtpTestFile));
+        }
+
+        [Test]
         public void FileExists_FileExists()
         {
             //Arrange
@@ -274,6 +330,154 @@ namespace LSCode.Files.Test.Unit.FTP
 
             //Assert
             Assert.That(exist, Is.False);
+        }
+
+        [Test]
+        public void GetFileSize_FileExists()
+        {
+            //Arrange
+            using var streamWriter = new StreamWriter(binFtpTestFile);
+            streamWriter.Write("test");
+            streamWriter.Close();
+
+            _fTPHelper.UploadFileFromPath(binFtpTestFile, ftpTestFile);
+
+            //Act
+            var size = _fTPHelper.GetFileSize(ftpTestFile);
+
+            //Assert
+            Assert.That(size, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void GetFileSize_FileDoesNotExist()
+        {
+            //Act
+            var size = _fTPHelper.GetFileSize(ftpTestFile);
+
+            //Assert
+            Assert.That(size, Is.Zero);
+        }
+
+        [Test]
+        public async Task GetFileSizeAsync_FileExists()
+        {
+            //Arrange
+            using var streamWriter = new StreamWriter(binFtpTestFile);
+            streamWriter.Write("test");
+            streamWriter.Close();
+
+            _fTPHelper.UploadFileFromPath(binFtpTestFile, ftpTestFile);
+
+            //Act
+            var size = await _fTPHelper.GetFileSizeAsync(ftpTestFile);
+
+            //Assert
+            Assert.That(size, Is.EqualTo(4));
+        }
+
+        [Test]
+        public async Task GetFileSizeAsync_FileDoesNotExist()
+        {
+            //Act
+            var size = await _fTPHelper.GetFileSizeAsync(ftpTestFile);
+
+            //Assert
+            Assert.That(size, Is.Zero);
+        }
+
+        [Test]
+        public void UploadFileFromBase64String()
+        {
+            //Arrange
+            var fileBase64String = "dGVzdA==";
+
+            //Act
+            _fTPHelper.UploadFileFromBase64String(fileBase64String, ftpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public async Task UploadFileFromBase64StringAsync()
+        {
+            //Arrange
+            var fileBase64String = "dGVzdA==";
+
+            //Act
+            await _fTPHelper.UploadFileFromBase64StringAsync(fileBase64String, ftpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void UploadFileFromBytes()
+        {
+            //Arrange
+            var fileBytes = Convert.FromBase64String("dGVzdA==");
+
+            //Act
+            _fTPHelper.UploadFileFromBytes(fileBytes, ftpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public async Task UploadFileFromBytesAsync()
+        {
+            //Arrange
+            var fileBytes = Convert.FromBase64String("dGVzdA==");
+
+            //Act
+            await _fTPHelper.UploadFileFromBytesAsync(fileBytes, ftpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void UploadFileFromPath()
+        {
+            //Arrange
+            using var streamWriter = new StreamWriter(binFtpTestFile);
+            streamWriter.Write("test");
+            streamWriter.Close();
+
+            //Act
+            _fTPHelper.UploadFileFromPath(binFtpTestFile, ftpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public async Task UploadFileFromPathAsync()
+        {
+            //Arrange
+            using var streamWriter = new StreamWriter(binFtpTestFile);
+            streamWriter.Write("test");
+            streamWriter.Close();
+
+            //Act
+            await _fTPHelper.UploadFileFromPathAsync(binFtpTestFile, ftpTestFile);
+
+            var exist = _fTPHelper.FileExists(ftpTestFile);
+
+            //Assert
+            Assert.That(exist, Is.True);
         }
     }
 }

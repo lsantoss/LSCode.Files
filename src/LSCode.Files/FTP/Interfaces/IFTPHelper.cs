@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace LSCode.Files.FTP.Interfaces
 {
@@ -46,6 +45,16 @@ namespace LSCode.Files.FTP.Interfaces
         /// <returns>True if path refers to an existing directory; false if the directory does not exist.</returns>
         Task<bool> DirectoryExistsAsync(string path);
 
+        /// <summary>Download a file from the parameterized destination.</summary>
+        /// <param name="path">Path of the file to be downloaded.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be saved.</param>
+        void DownloadFile(string path, string destinationFolderPath);
+
+        /// <summary>Asynchronously download a file from the parameterized destination.</summary>
+        /// <param name="path">Path of the file to be downloaded.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be saved.</param>
+        Task DownloadFileAsync(string path, string destinationFolderPath);
+
         /// <summary>Determines whether the specified file exists.</summary>
         /// <param name="path">File path to be checked.</param>
         /// <returns>True if path refers to an existing file; False if the file does not exist.</returns>
@@ -56,8 +65,44 @@ namespace LSCode.Files.FTP.Interfaces
         /// <returns>True if path refers to an existing file; False if the file does not exist.</returns>
         Task<bool> FileExistsAsync(string path);
 
-        void UploadFileFromBase64String(string base64String, string destinationFolderPath);
-        void UploadFileFromBytes(byte[] byteArray, string destinationFolderPath);
+        /// <summary>Retrieves the size of a file in bytes.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>Returns the size of a file in bytes. If it does not exist, it returns zero.</returns>
+        long GetFileSize(string path);
+
+        /// <summary>Asynchronously retrieves the size of a file in bytes.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>Returns the size of a file in bytes. If it does not exist, it returns zero.</returns>
+        Task<long> GetFileSizeAsync(string path);
+
+        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        void UploadFileFromBase64String(string contentBase64String, string destinationFolderPath);
+
+        /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        Task UploadFileFromBase64StringAsync(string contentBase64String, string destinationFolderPath);
+
+        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        void UploadFileFromBytes(byte[] contentByteArray, string destinationFolderPath);
+
+        /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        Task UploadFileFromBytesAsync(byte[] contentByteArray, string destinationFolderPath);
+
+        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="path">Path of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
         void UploadFileFromPath(string path, string destinationFolderPath);
+
+        /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="path">Path of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        Task UploadFileFromPathAsync(string path, string destinationFolderPath);
     }
 }
