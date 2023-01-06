@@ -161,18 +161,24 @@ namespace LSCode.Files.FTP
             }
         }
 
-        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
-        /// <param name="filePathToUpload">Path of the file to be sent.</param>
-        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        public void UploadFile(string filePathToUpload, string destinationFolderPath)
+        public void UploadFileFromBase64String(string base64String, string destinationFolderPath)
         {
-            var fileStream = File.OpenRead(filePathToUpload);
+            throw new NotImplementedException();
+        }
 
+        public void UploadFileFromBytes(byte[] byteArray, string destinationFolderPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="path">Path of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        public void UploadFileFromPath(string path, string destinationFolderPath)
+        {
+            using var fileStream = File.OpenRead(path);
             var buffer = new byte[fileStream.Length];
-
             fileStream.Read(buffer, 0, buffer.Length);
-
-            //var uri = new Uri(destinationFolderPath);
 
             var request = WebRequest.Create(destinationFolderPath) as FtpWebRequest;
             request.Credentials = new NetworkCredential(User, Password);
@@ -181,7 +187,7 @@ namespace LSCode.Files.FTP
             request.KeepAlive = false;
             request.UseBinary = true;
 
-            var stream = request.GetRequestStream();
+            using var stream = request.GetRequestStream();
             stream.Write(buffer, 0, buffer.Length);
             stream.Close();
 

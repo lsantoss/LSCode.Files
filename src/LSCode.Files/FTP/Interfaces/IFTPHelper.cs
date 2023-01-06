@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace LSCode.Files.FTP.Interfaces
 {
@@ -55,6 +56,8 @@ namespace LSCode.Files.FTP.Interfaces
         /// <returns>True if path refers to an existing file; False if the file does not exist.</returns>
         Task<bool> FileExistsAsync(string path);
 
-        void UploadFile(string filePathToUpload, string destinationFolderPath);
+        void UploadFileFromBase64String(string base64String, string destinationFolderPath);
+        void UploadFileFromBytes(byte[] byteArray, string destinationFolderPath);
+        void UploadFileFromPath(string path, string destinationFolderPath);
     }
 }
