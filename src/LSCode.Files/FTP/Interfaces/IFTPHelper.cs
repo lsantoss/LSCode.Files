@@ -11,6 +11,26 @@ namespace LSCode.Files.FTP.Interfaces
         /// <value>Password used for the connection.</value>
         public string Password { get; }
 
+        /// <summary>Append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
+        void AppendFile(string path, string contentBase64String);
+
+        /// <summary>Append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        void AppendFile(string path, byte[] contentByteArray);
+
+        /// <summary>Asynchronously append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
+        Task AppendFileAsync(string path, string contentBase64String);
+
+        /// <summary>Asynchronously append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        Task AppendFileAsync(string path, byte[] contentByteArray);
+
         /// <summary>Creates a directory in the parameterized path.</summary>
         /// <param name="path">The directory path to be create.</param>
         void CreateDirectory(string path);
@@ -78,31 +98,21 @@ namespace LSCode.Files.FTP.Interfaces
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        void UploadFileFromBase64String(string contentBase64String, string destinationFolderPath);
+        void UploadFile(string contentBase64String, string destinationFolderPath);
+
+        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        void UploadFile(byte[] contentByteArray, string destinationFolderPath);
 
         /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        Task UploadFileFromBase64StringAsync(string contentBase64String, string destinationFolderPath);
-
-        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
-        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
-        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        void UploadFileFromBytes(byte[] contentByteArray, string destinationFolderPath);
+        Task UploadFileAsync(string contentBase64String, string destinationFolderPath);
 
         /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        Task UploadFileFromBytesAsync(byte[] contentByteArray, string destinationFolderPath);
-
-        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
-        /// <param name="path">Path of the file to be sent.</param>
-        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        void UploadFileFromPath(string path, string destinationFolderPath);
-
-        /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
-        /// <param name="path">Path of the file to be sent.</param>
-        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        Task UploadFileFromPathAsync(string path, string destinationFolderPath);
+        Task UploadFileAsync(byte[] contentByteArray, string destinationFolderPath);
     }
 }

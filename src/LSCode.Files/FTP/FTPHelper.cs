@@ -25,6 +25,82 @@ namespace LSCode.Files.FTP
             Password = password;
         }
 
+        /// <summary>Append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
+        public void AppendFile(string path, string contentBase64String)
+        {
+            var contentByteArray = Convert.FromBase64String(contentBase64String);
+
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.AppendFile;
+            request.ContentLength = contentByteArray.Length;
+
+            var requestStream = request.GetRequestStream();
+            requestStream.Write(contentByteArray, 0, contentByteArray.Length);
+            requestStream.Close();
+
+            var response = request.GetResponse() as FtpWebResponse;
+            response.Close();
+        }
+
+        /// <summary>Append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        public void AppendFile(string path, byte[] contentByteArray)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.AppendFile;
+            request.ContentLength = contentByteArray.Length;
+
+            var requestStream = request.GetRequestStream();
+            requestStream.Write(contentByteArray, 0, contentByteArray.Length);
+            requestStream.Close();
+
+            var response = request.GetResponse() as FtpWebResponse;
+            response.Close();
+        }
+
+        /// <summary>Asynchronously append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
+        public async Task AppendFileAsync(string path, string contentBase64String)
+        {
+            var contentByteArray = Convert.FromBase64String(contentBase64String);
+
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.AppendFile;
+            request.ContentLength = contentByteArray.Length;
+
+            var requestStream = await request.GetRequestStreamAsync();
+            await requestStream.WriteAsync(contentByteArray, 0, contentByteArray.Length);
+            requestStream.Close();
+
+            var response = await request.GetResponseAsync() as FtpWebResponse;
+            response.Close();
+        }
+
+        /// <summary>Asynchronously append a file to an existing file in the parameterized path, if the file does not exist it will be created.</summary>
+        /// <param name="path">The file path to be appended.</param>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        public async Task AppendFileAsync(string path, byte[] contentByteArray)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.AppendFile;
+            request.ContentLength = contentByteArray.Length;
+
+            var requestStream = await request.GetRequestStreamAsync();
+            await requestStream.WriteAsync(contentByteArray, 0, contentByteArray.Length);
+            requestStream.Close();
+
+            var response = await request.GetResponseAsync() as FtpWebResponse;
+            response.Close();
+        }
+
         /// <summary>Creates a directory in the parameterized path.</summary>
         /// <param name="path">The directory path to be create.</param>
         public void CreateDirectory(string path)
@@ -230,10 +306,27 @@ namespace LSCode.Files.FTP
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        public void UploadFileFromBase64String(string contentBase64String, string destinationFolderPath)
+        public void UploadFile(string contentBase64String, string destinationFolderPath)
         {
             var contentByteArray = Convert.FromBase64String(contentBase64String);
 
+            var request = WebRequest.Create(destinationFolderPath) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+            request.ContentLength = contentByteArray.Length;
+            request.KeepAlive = false;
+            request.UseBinary = true;
+
+            using var stream = request.GetRequestStream();
+            stream.Write(contentByteArray, 0, contentByteArray.Length);
+            stream.Close();
+        }
+
+        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
+        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
+        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
+        public void UploadFile(byte[] contentByteArray, string destinationFolderPath)
+        {
             var request = WebRequest.Create(destinationFolderPath) as FtpWebRequest;
             request.Credentials = new NetworkCredential(User, Password);
             request.Method = WebRequestMethods.Ftp.UploadFile;
@@ -249,7 +342,7 @@ namespace LSCode.Files.FTP
         /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        public async Task UploadFileFromBase64StringAsync(string contentBase64String, string destinationFolderPath)
+        public async Task UploadFileAsync(string contentBase64String, string destinationFolderPath)
         {
             var contentByteArray = Convert.FromBase64String(contentBase64String);
 
@@ -265,27 +358,10 @@ namespace LSCode.Files.FTP
             stream.Close();
         }
 
-        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
-        /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
-        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        public void UploadFileFromBytes(byte[] contentByteArray, string destinationFolderPath)
-        {
-            var request = WebRequest.Create(destinationFolderPath) as FtpWebRequest;
-            request.Credentials = new NetworkCredential(User, Password);
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.ContentLength = contentByteArray.Length;
-            request.KeepAlive = false;
-            request.UseBinary = true;
-
-            using var stream = request.GetRequestStream();
-            stream.Write(contentByteArray, 0, contentByteArray.Length);
-            stream.Close();
-        }
-
         /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentByteArray">Content in bytes of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        public async Task UploadFileFromBytesAsync(byte[] contentByteArray, string destinationFolderPath)
+        public async Task UploadFileAsync(byte[] contentByteArray, string destinationFolderPath)
         {
             var request = WebRequest.Create(destinationFolderPath) as FtpWebRequest;
             request.Credentials = new NetworkCredential(User, Password);
@@ -297,52 +373,6 @@ namespace LSCode.Files.FTP
             using var stream = await request.GetRequestStreamAsync();
             await stream.WriteAsync(contentByteArray, 0, contentByteArray.Length);
             stream.Close();
-        }
-
-        /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
-        /// <param name="path">Path of the file to be sent.</param>
-        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        public void UploadFileFromPath(string path, string destinationFolderPath)
-        {
-            using var fileStream = File.OpenRead(path);
-            var contentByteArray = new byte[fileStream.Length];
-            fileStream.Read(contentByteArray, 0, contentByteArray.Length);
-
-            var request = WebRequest.Create(destinationFolderPath) as FtpWebRequest;
-            request.Credentials = new NetworkCredential(User, Password);
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.ContentLength = contentByteArray.Length;
-            request.KeepAlive = false;
-            request.UseBinary = true;
-
-            using var stream = request.GetRequestStream();
-            stream.Write(contentByteArray, 0, contentByteArray.Length);
-            stream.Close();
-
-            fileStream.Close();
-        }
-
-        /// <summary>Asynchronously uploads a file of any extension to the parameterized destination.</summary>
-        /// <param name="path">Path of the file to be sent.</param>
-        /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>
-        public async Task UploadFileFromPathAsync(string path, string destinationFolderPath)
-        {
-            using var fileStream = File.OpenRead(path);
-            var contentByteArray = new byte[fileStream.Length];
-            await fileStream.ReadAsync(contentByteArray, 0, contentByteArray.Length);
-
-            var request = WebRequest.Create(destinationFolderPath) as FtpWebRequest;
-            request.Credentials = new NetworkCredential(User, Password);
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.ContentLength = contentByteArray.Length;
-            request.KeepAlive = false;
-            request.UseBinary = true;
-
-            using var stream = await request.GetRequestStreamAsync();
-            await stream.WriteAsync(contentByteArray, 0, contentByteArray.Length);
-            stream.Close();
-
-            fileStream.Close();
         }
     }
 }
