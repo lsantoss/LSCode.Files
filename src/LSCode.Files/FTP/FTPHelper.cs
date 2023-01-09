@@ -303,6 +303,30 @@ namespace LSCode.Files.FTP
             }
         }
 
+        /// <summary>Retrieves the date-time stamp from a file.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>Returns the date-time stamp from a file.</returns>
+        public DateTime GetLastModifiedDateUTC(string path)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
+            var response = request.GetResponse() as FtpWebResponse;
+            return response.LastModified.ToUniversalTime();
+        }
+
+        /// <summary>Asynchronously retrieves the date-time stamp from a file.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>Returns the date-time stamp from a file.</returns>
+        public async Task<DateTime> GetLastModifiedDateUTCAsync(string path)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
+            var response = await request.GetResponseAsync() as FtpWebResponse;
+            return response.LastModified.ToUniversalTime();
+        }
+
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace LSCode.Files.FTP.Interfaces
 {
@@ -94,6 +95,16 @@ namespace LSCode.Files.FTP.Interfaces
         /// <param name="path">File path to be checked.</param>
         /// <returns>Returns the size of a file in bytes. If it does not exist, it returns zero.</returns>
         Task<long> GetFileSizeAsync(string path);
+
+        /// <summary>Retrieves the date-time stamp from a file.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>Returns the date-time stamp from a file.</returns>
+        DateTime GetLastModifiedDateUTC(string path);
+
+        /// <summary>Asynchronously retrieves the date-time stamp from a file.</summary>
+        /// <param name="path">File path to be checked.</param>
+        /// <returns>Returns the date-time stamp from a file.</returns>
+        Task<DateTime> GetLastModifiedDateUTCAsync(string path);
 
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>

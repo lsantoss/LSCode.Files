@@ -543,6 +543,60 @@ namespace LSCode.Files.Test.Unit.FTP
         }
 
         [Test]
+        public void GetLastModifiedDateUTC_FileExists()
+        {
+            //Arrange
+            var fileBase64String = "dGVzdA==";
+
+            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+
+            //Act
+            var date = _fTPHelper.GetLastModifiedDateUTC(ftpTestFile);
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(date.Date, Is.EqualTo(DateTime.UtcNow.Date));
+                Assert.That(date.Hour, Is.EqualTo(DateTime.UtcNow.Hour));
+                Assert.That(date.Minute, Is.EqualTo(DateTime.UtcNow.Minute));
+            });
+        }
+
+        [Test]
+        public void GetLastModifiedDateUTC_FileDoesNotExist()
+        {
+            //Assert
+            Assert.Throws<WebException>(() => _fTPHelper.GetLastModifiedDateUTC(ftpTestFile));
+        }
+
+        [Test]
+        public async Task GetLastModifiedDateUTCAsync_FileExists()
+        {
+            //Arrange
+            var fileBase64String = "dGVzdA==";
+
+            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+
+            //Act
+            var date = await _fTPHelper.GetLastModifiedDateUTCAsync(ftpTestFile);
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(date.Date, Is.EqualTo(DateTime.UtcNow.Date));
+                Assert.That(date.Hour, Is.EqualTo(DateTime.UtcNow.Hour));
+                Assert.That(date.Minute, Is.EqualTo(DateTime.UtcNow.Minute));
+            });
+        }
+
+        [Test]
+        public void GetLastModifiedDateUTCAsync_FileDoesNotExist()
+        {
+            //Assert
+            Assert.ThrowsAsync<WebException>(() => _fTPHelper.GetLastModifiedDateUTCAsync(ftpTestFile));
+        }
+
+        [Test]
         public void UploadFile_FromBase64String()
         {
             //Arrange
