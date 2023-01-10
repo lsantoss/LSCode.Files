@@ -117,6 +117,16 @@ namespace LSCode.Files.FTP.Interfaces
         /// <returns>Returns a list of child directories and files.</returns>
         Task<List<string>> ListDirectoryContentAsync(string path);
 
+        /// <summary>Renames a directory or file.</summary>
+        /// <param name="path">Directory path or file path to be remaned.</param>
+        /// <param name="newPath">Name for directory or file.</param>
+        void Rename(string path, string newPath);
+
+        /// <summary>Asynchronously renames a directory or file.</summary>
+        /// <param name="path">Directory path or file path to be remaned.</param>
+        /// <param name="newPath">Name for directory or file.</param>
+        Task RenameAsync(string path, string newPath);
+
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
         /// <param name="destinationFolderPath">Directory path where the file will be uploaded.</param>

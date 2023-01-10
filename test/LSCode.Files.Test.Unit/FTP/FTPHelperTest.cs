@@ -685,6 +685,114 @@ namespace LSCode.Files.Test.Unit.FTP
         }
 
         [Test]
+        public void Rename_DirectoryExists()
+        {
+            //Arrange
+            _fTPHelper.CreateDirectory(ftpTestDirectory);
+
+            var newPath = "ftp://192.168.56.1/directoryRenamed";
+
+            //Act
+            _fTPHelper.Rename(ftpTestDirectory, "directoryRenamed");
+
+            var exist = _fTPHelper.DirectoryExists(newPath);
+
+            _fTPHelper.DeleteDirectory(newPath);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void Rename_DirectoryDoesNotExist()
+        {
+            //Assert
+            Assert.Throws<WebException>(() => _fTPHelper.Rename(ftpTestDirectory, "directoryRenamed"));
+        }
+
+        [Test]
+        public void Rename_FileExists()
+        {
+            //Arrange
+            var fileBase64String = "dGVzdA==";
+
+            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+
+            var newPath = "ftp://192.168.56.1/testFileRenamed.txt";
+
+            //Act
+            _fTPHelper.Rename(ftpTestFile, "testFileRenamed.txt");
+
+            var exist = _fTPHelper.FileExists(newPath);
+
+            _fTPHelper.DeleteFile(newPath);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void Rename_FileDoesNotExist()
+        {
+            //Assert
+            Assert.Throws<WebException>(() => _fTPHelper.Rename(ftpTestFile, "testFileRenamed.txt"));
+        }
+
+        [Test]
+        public async Task RenameAsync_DirectoryExists()
+        {
+            //Arrange
+            _fTPHelper.CreateDirectory(ftpTestDirectory);
+
+            var newPath = "ftp://192.168.56.1/directoryRenamed";
+
+            //Act
+            await _fTPHelper.RenameAsync(ftpTestDirectory, "directoryRenamed");
+
+            var exist = _fTPHelper.DirectoryExists(newPath);
+
+            _fTPHelper.DeleteDirectory(newPath);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void RenameAsync_DirectoryDoesNotExist()
+        {
+            //Assert
+            Assert.ThrowsAsync<WebException>(() => _fTPHelper.RenameAsync(ftpTestDirectory, "directoryRenamed"));
+        }
+
+        [Test]
+        public async Task RenameAsync_FileExists()
+        {
+            //Arrange
+            var fileBase64String = "dGVzdA==";
+
+            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+
+            var newPath = "ftp://192.168.56.1/testFileRenamed.txt";
+
+            //Act
+            await _fTPHelper.RenameAsync(ftpTestFile, "testFileRenamed.txt");
+
+            var exist = _fTPHelper.FileExists(newPath);
+
+            _fTPHelper.DeleteFile(newPath);
+
+            //Assert
+            Assert.That(exist, Is.True);
+        }
+
+        [Test]
+        public void RenameAsync_FileDoesNotExist()
+        {
+            //Assert
+            Assert.ThrowsAsync<WebException>(() => _fTPHelper.RenameAsync(ftpTestFile, "testFileRenamed.txt"));
+        }
+
+        [Test]
         public void UploadFile_FromBase64String()
         {
             //Arrange

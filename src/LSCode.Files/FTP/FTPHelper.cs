@@ -42,7 +42,7 @@ namespace LSCode.Files.FTP
             requestStream.Write(contentByteArray, 0, contentByteArray.Length);
             requestStream.Close();
 
-            var response = request.GetResponse() as FtpWebResponse;
+            using var response = request.GetResponse() as FtpWebResponse;
             response.Close();
         }
 
@@ -56,11 +56,11 @@ namespace LSCode.Files.FTP
             request.Method = WebRequestMethods.Ftp.AppendFile;
             request.ContentLength = contentByteArray.Length;
 
-            var requestStream = request.GetRequestStream();
+            using var requestStream = request.GetRequestStream();
             requestStream.Write(contentByteArray, 0, contentByteArray.Length);
             requestStream.Close();
 
-            var response = request.GetResponse() as FtpWebResponse;
+            using var response = request.GetResponse() as FtpWebResponse;
             response.Close();
         }
 
@@ -76,11 +76,11 @@ namespace LSCode.Files.FTP
             request.Method = WebRequestMethods.Ftp.AppendFile;
             request.ContentLength = contentByteArray.Length;
 
-            var requestStream = await request.GetRequestStreamAsync();
+            using var requestStream = await request.GetRequestStreamAsync();
             await requestStream.WriteAsync(contentByteArray, 0, contentByteArray.Length);
             requestStream.Close();
 
-            var response = await request.GetResponseAsync() as FtpWebResponse;
+            using var response = await request.GetResponseAsync() as FtpWebResponse;
             response.Close();
         }
 
@@ -94,11 +94,11 @@ namespace LSCode.Files.FTP
             request.Method = WebRequestMethods.Ftp.AppendFile;
             request.ContentLength = contentByteArray.Length;
 
-            var requestStream = await request.GetRequestStreamAsync();
+            using var requestStream = await request.GetRequestStreamAsync();
             await requestStream.WriteAsync(contentByteArray, 0, contentByteArray.Length);
             requestStream.Close();
 
-            var response = await request.GetResponseAsync() as FtpWebResponse;
+            using var response = await request.GetResponseAsync() as FtpWebResponse;
             response.Close();
         }
 
@@ -209,9 +209,9 @@ namespace LSCode.Files.FTP
             request.Credentials = new NetworkCredential(User, Password);
             request.Method = WebRequestMethods.Ftp.DownloadFile;
 
-            using var ftpStream = request.GetResponse().GetResponseStream();
+            using var stream = request.GetResponse().GetResponseStream();
             using var fileStream = File.Create(destinationFolderPath);
-            ftpStream.CopyTo(fileStream);
+            stream.CopyTo(fileStream);
         }
 
         /// <summary>Asynchronously download a file from the parameterized destination.</summary>
@@ -223,9 +223,9 @@ namespace LSCode.Files.FTP
             request.Credentials = new NetworkCredential(User, Password);
             request.Method = WebRequestMethods.Ftp.DownloadFile;
 
-            using var ftpStream = (await request.GetResponseAsync()).GetResponseStream();
+            using var stream = (await request.GetResponseAsync()).GetResponseStream();
             using var fileStream = File.Create(destinationFolderPath);
-            await ftpStream.CopyToAsync(fileStream);
+            await stream.CopyToAsync(fileStream);
         }
 
         /// <summary>Determines whether the specified file exists.</summary>
@@ -276,7 +276,8 @@ namespace LSCode.Files.FTP
                 var request = WebRequest.Create(path) as FtpWebRequest;
                 request.Credentials = new NetworkCredential(User, Password);
                 request.Method = WebRequestMethods.Ftp.GetFileSize;
-                var response = request.GetResponse() as FtpWebResponse;
+
+                using var response = request.GetResponse() as FtpWebResponse;
                 return response.ContentLength;
             }
             catch
@@ -295,7 +296,8 @@ namespace LSCode.Files.FTP
                 var request = WebRequest.Create(path) as FtpWebRequest;
                 request.Credentials = new NetworkCredential(User, Password);
                 request.Method = WebRequestMethods.Ftp.GetFileSize;
-                var response = await request.GetResponseAsync() as FtpWebResponse;
+
+                using var response = await request.GetResponseAsync() as FtpWebResponse;
                 return response.ContentLength;
             }
             catch
@@ -312,7 +314,8 @@ namespace LSCode.Files.FTP
             var request = WebRequest.Create(path) as FtpWebRequest;
             request.Credentials = new NetworkCredential(User, Password);
             request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
-            var response = request.GetResponse() as FtpWebResponse;
+
+            using var response = request.GetResponse() as FtpWebResponse;
             return response.LastModified.ToUniversalTime();
         }
 
@@ -324,7 +327,8 @@ namespace LSCode.Files.FTP
             var request = WebRequest.Create(path) as FtpWebRequest;
             request.Credentials = new NetworkCredential(User, Password);
             request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
-            var response = await request.GetResponseAsync() as FtpWebResponse;
+
+            using var response = await request.GetResponseAsync() as FtpWebResponse;
             return response.LastModified.ToUniversalTime();
         }
 
@@ -337,8 +341,9 @@ namespace LSCode.Files.FTP
             request.Credentials = new NetworkCredential(User, Password);
             request.Method = WebRequestMethods.Ftp.ListDirectory;
 
-            var response = request.GetResponse() as FtpWebResponse;
-            var streamReader = new StreamReader(response.GetResponseStream());
+            using var response = request.GetResponse() as FtpWebResponse;
+
+            using var streamReader = new StreamReader(response.GetResponseStream());
 
             var directories = new List<string>();
 
@@ -352,6 +357,8 @@ namespace LSCode.Files.FTP
 
             streamReader.Close();
 
+            response.Close();
+
             return directories;
         }
 
@@ -364,8 +371,9 @@ namespace LSCode.Files.FTP
             request.Credentials = new NetworkCredential(User, Password);
             request.Method = WebRequestMethods.Ftp.ListDirectory;
 
-            var response = await request.GetResponseAsync() as FtpWebResponse;
-            var streamReader = new StreamReader(response.GetResponseStream());
+            using var response = await request.GetResponseAsync() as FtpWebResponse;
+
+            using var streamReader = new StreamReader(response.GetResponseStream());
 
             var directories = new List<string>();
 
@@ -379,7 +387,47 @@ namespace LSCode.Files.FTP
 
             streamReader.Close();
 
+            response.Close();
+
             return directories;
+        }
+
+        /// <summary>Renames a directory or file.</summary>
+        /// <param name="path">Directory path or file path to be remaned.</param>
+        /// <param name="newPath">Name for directory or file.</param>
+        public void Rename(string path, string newPath)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.Rename;
+            request.RenameTo = newPath;
+            request.UseBinary = true;
+
+            using var response = request.GetResponse() as FtpWebResponse;
+
+            using var stream = response.GetResponseStream();
+            stream.Close();
+
+            response.Close();
+        }
+
+        /// <summary>Asynchronously renames a directory or file.</summary>
+        /// <param name="path">Directory path or file path to be remaned.</param>
+        /// <param name="newPath">Name for directory or file.</param>
+        public async Task RenameAsync(string path, string newPath)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.Rename;
+            request.RenameTo = newPath;
+            request.UseBinary = true;
+
+            using var response = await request.GetResponseAsync() as FtpWebResponse;
+
+            using var stream = response.GetResponseStream();
+            stream.Close();
+
+            response.Close();
         }
 
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
