@@ -1,5 +1,6 @@
 ﻿using LSCode.Files.FTP.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -325,6 +326,60 @@ namespace LSCode.Files.FTP
             request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
             var response = await request.GetResponseAsync() as FtpWebResponse;
             return response.LastModified.ToUniversalTime();
+        }
+
+        /// <summary>Retrieves a list of child directories and files.</summary>
+        /// <param name="path">Directory path to be checked.</param>
+        /// <returns>Returns a list of child directories and files.</returns>
+        public List<string> ListDirectoryContent(string path)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.ListDirectory;
+
+            var response = request.GetResponse() as FtpWebResponse;
+            var streamReader = new StreamReader(response.GetResponseStream());
+
+            var directories = new List<string>();
+
+            var line = streamReader.ReadLine();
+
+            while (!string.IsNullOrEmpty(line))
+            {
+                directories.Add(line);
+                line = streamReader.ReadLine();
+            }
+
+            streamReader.Close();
+
+            return directories;
+        }
+
+        /// <summary>Asynchronously retrieves a list of child directories and files.</summary>
+        /// <param name="path">Directory path to be checked.</param>
+        /// <returns>Returns a list of child directories and files.</returns>
+        public async Task<List<string>> ListDirectoryContentAsync(string path)
+        {
+            var request = WebRequest.Create(path) as FtpWebRequest;
+            request.Credentials = new NetworkCredential(User, Password);
+            request.Method = WebRequestMethods.Ftp.ListDirectory;
+
+            var response = await request.GetResponseAsync() as FtpWebResponse;
+            var streamReader = new StreamReader(response.GetResponseStream());
+
+            var directories = new List<string>();
+
+            var line = await streamReader.ReadLineAsync();
+
+            while (!string.IsNullOrEmpty(line))
+            {
+                directories.Add(line);
+                line = await streamReader.ReadLineAsync();
+            }
+
+            streamReader.Close();
+
+            return directories;
         }
 
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>

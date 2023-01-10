@@ -597,6 +597,94 @@ namespace LSCode.Files.Test.Unit.FTP
         }
 
         [Test]
+        public void ListDirectoryContent_ListOfFilesAndDirectories()
+        {
+            //Arrange
+            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPHelper.UploadFile("dGVzdA==", $@"{ftpTestDirectory}\testFile.txt");
+
+            //Act
+            var list = _fTPHelper.ListDirectoryContent(ftpTestDirectory);
+
+            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPHelper.DeleteFile($@"{ftpTestDirectory}\testFile.txt");
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(list[0], Is.EqualTo("ftpTestDirectory/dir1"));
+                Assert.That(list[1], Is.EqualTo("ftpTestDirectory/dir2"));
+                Assert.That(list[2], Is.EqualTo("ftpTestDirectory/dir3"));
+                Assert.That(list[3], Is.EqualTo("ftpTestDirectory/testFile.txt"));
+            });
+        }
+
+        [Test]
+        public void ListDirectoryContent_WithoutContent()
+        {
+            //Arrange
+            _fTPHelper.CreateDirectory(ftpTestDirectory);
+
+            //Act
+            var list = _fTPHelper.ListDirectoryContent(ftpTestDirectory);
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(list, Is.Empty);
+            });
+        }
+
+        [Test]
+        public async Task ListDirectoryContentAsync_ListOfFilesAndDirectories()
+        {
+            //Arrange
+            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPHelper.UploadFile("dGVzdA==", $@"{ftpTestDirectory}\testFile.txt");
+
+            //Act
+            var list = await _fTPHelper.ListDirectoryContentAsync(ftpTestDirectory);
+
+            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPHelper.DeleteFile($@"{ftpTestDirectory}\testFile.txt");
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(list[0], Is.EqualTo("ftpTestDirectory/dir1"));
+                Assert.That(list[1], Is.EqualTo("ftpTestDirectory/dir2"));
+                Assert.That(list[2], Is.EqualTo("ftpTestDirectory/dir3"));
+                Assert.That(list[3], Is.EqualTo("ftpTestDirectory/testFile.txt"));
+            });
+        }
+
+        [Test]
+        public async Task ListDirectoryContentAsync_WithoutContent()
+        {
+            //Arrange
+            _fTPHelper.CreateDirectory(ftpTestDirectory);
+
+            //Act
+            var list = await _fTPHelper.ListDirectoryContentAsync(ftpTestDirectory);
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(list, Is.Empty);
+            });
+        }
+
+        [Test]
         public void UploadFile_FromBase64String()
         {
             //Arrange

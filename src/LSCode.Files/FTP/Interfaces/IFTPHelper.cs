@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LSCode.Files.FTP.Interfaces
@@ -105,6 +106,16 @@ namespace LSCode.Files.FTP.Interfaces
         /// <param name="path">File path to be checked.</param>
         /// <returns>Returns the date-time stamp from a file.</returns>
         Task<DateTime> GetLastModifiedDateUTCAsync(string path);
+
+        /// <summary>Retrieves a list of child directories and files.</summary>
+        /// <param name="path">Directory path to be checked.</param>
+        /// <returns>Returns a list of child directories and files.</returns>
+        List<string> ListDirectoryContent(string path);
+
+        /// <summary>Asynchronously retrieves a list of child directories and files.</summary>
+        /// <param name="path">Directory path to be checked.</param>
+        /// <returns>Returns a list of child directories and files.</returns>
+        Task<List<string>> ListDirectoryContentAsync(string path);
 
         /// <summary>Uploads a file of any extension to the parameterized destination.</summary>
         /// <param name="contentBase64String">Content in base64String of the file to be sent.</param>
