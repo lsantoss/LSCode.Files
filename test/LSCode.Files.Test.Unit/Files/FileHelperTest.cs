@@ -1,5 +1,6 @@
 ﻿using ImageMagick;
 using LSCode.Files.Files;
+using LSCode.Files.Files.Interfaces;
 using NUnit.Framework;
 using System;
 using System.IO;
@@ -13,6 +14,10 @@ namespace LSCode.Files.Test.Unit.Files
         private readonly static string testDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myTestDirectory";
         private readonly static string testFileTxt = @$"{testDirectory}\file.txt";
         private readonly static string testFilePng = @$"{testDirectory}\file.png";
+
+        private readonly IFileHelper _fileHelper;
+
+        public FileHelperTest() => _fileHelper = new FileHelper();
 
         [SetUp]
         public void SetUp()
@@ -37,7 +42,7 @@ namespace LSCode.Files.Test.Unit.Files
             var text = "File content";
 
             //Act
-            FileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -60,7 +65,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            FileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -84,7 +89,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            FileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -104,7 +109,7 @@ namespace LSCode.Files.Test.Unit.Files
             string[] text = { "File content", "File content" };
 
             //Act
-            FileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -127,7 +132,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            FileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -155,7 +160,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            FileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.AppendText(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -175,7 +180,7 @@ namespace LSCode.Files.Test.Unit.Files
             var text = "File content";
 
             //Act
-            await FileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -198,7 +203,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            await FileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -222,7 +227,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            await FileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -242,7 +247,7 @@ namespace LSCode.Files.Test.Unit.Files
             string[] text = { "File content", "File content" };
 
             //Act
-            await FileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -265,7 +270,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            await FileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -293,7 +298,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            await FileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.AppendTextAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -319,7 +324,7 @@ namespace LSCode.Files.Test.Unit.Files
             var originalSize = new FileInfo(testFilePng).Length;
 
             //Act
-            FileHelper.Compress(testFilePng, MagickFormat.Png, 50, 50);
+            _fileHelper.Compress(testFilePng, MagickFormat.Png, 50, 50);
 
             var compressedSize = new FileInfo(testFilePng).Length;
 
@@ -347,7 +352,7 @@ namespace LSCode.Files.Test.Unit.Files
             var originalSize = new FileInfo(testFilePng).Length;
 
             //Act
-            await FileHelper.CompressAsync(testFilePng, MagickFormat.Png, 50, 50);
+            await _fileHelper.CompressAsync(testFilePng, MagickFormat.Png, 50, 50);
 
             var compressedSize = new FileInfo(testFilePng).Length;
 
@@ -377,7 +382,7 @@ namespace LSCode.Files.Test.Unit.Files
             var testFileToCopy = @$"{testDirectory}\newPath\fileCopied.txt";
 
             //Act
-            FileHelper.Copy(testFileTxt, testFileToCopy);
+            _fileHelper.Copy(testFileTxt, testFileToCopy);
 
             var originalFileExist = File.Exists(testFileTxt);
             var copiedFileExist = File.Exists(testFileToCopy);
@@ -411,7 +416,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter2.Close();
 
             //Act
-            FileHelper.Copy(testFileTxt, testFileToCopy, true);
+            _fileHelper.Copy(testFileTxt, testFileToCopy, true);
 
             var originalFileExist = File.Exists(testFileTxt);
             var copiedFileExist = File.Exists(testFileToCopy);
@@ -430,7 +435,7 @@ namespace LSCode.Files.Test.Unit.Files
         public void Create()
         {
             //Act
-            FileHelper.Create(testFileTxt);
+            _fileHelper.Create(testFileTxt);
 
             var exist = File.Exists(testFileTxt);
 
@@ -445,7 +450,7 @@ namespace LSCode.Files.Test.Unit.Files
             var fileBase64String = "RmlsZSBjb250ZW50";
 
             //Act
-            FileHelper.CreateFromBase64String(testFileTxt, fileBase64String);
+            _fileHelper.CreateFromBase64String(testFileTxt, fileBase64String);
 
             var fileInfo = new FileInfo(testFileTxt);
 
@@ -467,7 +472,7 @@ namespace LSCode.Files.Test.Unit.Files
             var fileBase64String = "RmlsZSBjb250ZW50";
 
             //Act
-            await FileHelper.CreateFromBase64StringAsync(testFileTxt, fileBase64String);
+            await _fileHelper.CreateFromBase64StringAsync(testFileTxt, fileBase64String);
 
             var fileInfo = new FileInfo(testFileTxt);
 
@@ -490,7 +495,7 @@ namespace LSCode.Files.Test.Unit.Files
             var imageBytes = Convert.FromBase64String(fileBase64String);
 
             //Act
-            FileHelper.CreateFromBytes(testFileTxt, imageBytes);
+            _fileHelper.CreateFromBytes(testFileTxt, imageBytes);
 
             var fileInfo = new FileInfo(testFileTxt);
 
@@ -513,7 +518,7 @@ namespace LSCode.Files.Test.Unit.Files
             var imageBytes = Convert.FromBase64String(fileBase64String);
 
             //Act
-            await FileHelper.CreateFromBytesAsync(testFileTxt, imageBytes);
+            await _fileHelper.CreateFromBytesAsync(testFileTxt, imageBytes);
 
             var fileInfo = new FileInfo(testFileTxt);
 
@@ -535,7 +540,7 @@ namespace LSCode.Files.Test.Unit.Files
             var text = "File content";
 
             //Act
-            FileHelper.CreateTextFile(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.CreateTextFile(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -555,7 +560,7 @@ namespace LSCode.Files.Test.Unit.Files
             string[] text = { "File content", "File content" };
 
             //Act
-            FileHelper.CreateTextFile(testFileTxt, Encoding.UTF8, text);
+            _fileHelper.CreateTextFile(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -575,7 +580,7 @@ namespace LSCode.Files.Test.Unit.Files
             var text = "File content";
 
             //Act
-            await FileHelper.CreateTextFileAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.CreateTextFileAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -595,7 +600,7 @@ namespace LSCode.Files.Test.Unit.Files
             string[] text = { "File content", "File content" };
 
             //Act
-            await FileHelper.CreateTextFileAsync(testFileTxt, Encoding.UTF8, text);
+            await _fileHelper.CreateTextFileAsync(testFileTxt, Encoding.UTF8, text);
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllLines(testFileTxt);
@@ -616,7 +621,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            FileHelper.Delete(testFileTxt);
+            _fileHelper.Delete(testFileTxt);
 
             var exist = File.Exists(testFileTxt);
 
@@ -628,7 +633,7 @@ namespace LSCode.Files.Test.Unit.Files
         public void Delete_FileDoesNotExist()
         {
             //Act
-            FileHelper.Delete(testFileTxt);
+            _fileHelper.Delete(testFileTxt);
 
             var exist = File.Exists(testFileTxt);
 
@@ -646,10 +651,10 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Write(text);
             streamWriter.Close();
 
-            FileHelper.Encrypt(testFileTxt, "myKey123");
+            _fileHelper.Encrypt(testFileTxt, "myKey123");
 
             //Act
-            FileHelper.Decrypt(testFileTxt, "myKey123");
+            _fileHelper.Decrypt(testFileTxt, "myKey123");
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -677,7 +682,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            FileHelper.Encrypt(testFileTxt, "myKey123");
+            _fileHelper.Encrypt(testFileTxt, "myKey123");
 
             var exist = File.Exists(testFileTxt);
             var content = File.ReadAllText(testFileTxt);
@@ -698,7 +703,7 @@ namespace LSCode.Files.Test.Unit.Files
         public void Exists_FileDoesNotExist()
         {
             //Act
-            var exist = FileHelper.Exists(testFileTxt);
+            var exist = _fileHelper.Exists(testFileTxt);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -712,7 +717,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var exist = FileHelper.Exists(testFileTxt);
+            var exist = _fileHelper.Exists(testFileTxt);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -722,7 +727,7 @@ namespace LSCode.Files.Test.Unit.Files
         public void Get_FileDoesNotExist()
         {
             //Act
-            var fileInfo = FileHelper.Get(testFileTxt);
+            var fileInfo = _fileHelper.Get(testFileTxt);
 
             //Assert
             Assert.Multiple(() =>
@@ -740,7 +745,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var fileInfo = FileHelper.Get(testFileTxt);
+            var fileInfo = _fileHelper.Get(testFileTxt);
 
             //Assert
             Assert.Multiple(() =>
@@ -766,7 +771,7 @@ namespace LSCode.Files.Test.Unit.Files
             var testFileToMove = @$"{testDirectory}\newPath\fileMoved.txt";
 
             //Act
-            FileHelper.Move(testFileTxt, testFileToMove);
+            _fileHelper.Move(testFileTxt, testFileToMove);
 
             var originalFileExist = File.Exists(testFileTxt);
             var movedFileExist = File.Exists(testFileToMove);
@@ -791,7 +796,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            using var fileStream = FileHelper.Open(testFileTxt, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using var fileStream = _fileHelper.Open(testFileTxt, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             var info = new UTF8Encoding(true).GetBytes(text);
             fileStream.Write(info, 0, info.Length);
             fileStream.Close();
@@ -815,7 +820,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadToBase64String(testFileTxt);
+            var content = _fileHelper.ReadToBase64String(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -832,7 +837,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadToBase64String(testFileTxt);
+            var content = _fileHelper.ReadToBase64String(testFileTxt);
 
             //Assert
             Assert.Multiple(() =>
@@ -851,7 +856,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadToBase64StringAsync(testFileTxt);
+            var content = await _fileHelper.ReadToBase64StringAsync(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -868,7 +873,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadToBase64StringAsync(testFileTxt);
+            var content = await _fileHelper.ReadToBase64StringAsync(testFileTxt);
 
             //Assert
             Assert.Multiple(() =>
@@ -887,7 +892,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadToBytes(testFileTxt);
+            var content = _fileHelper.ReadToBytes(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -904,7 +909,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadToBytes(testFileTxt);
+            var content = _fileHelper.ReadToBytes(testFileTxt);
 
             //Assert
             Assert.Multiple(() =>
@@ -922,7 +927,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadToBytesAsync(testFileTxt);
+            var content = await _fileHelper.ReadToBytesAsync(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -939,7 +944,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadToBytesAsync(testFileTxt);
+            var content = await _fileHelper.ReadToBytesAsync(testFileTxt);
 
             //Assert
             Assert.Multiple(() =>
@@ -957,7 +962,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadLines(testFileTxt);
+            var content = _fileHelper.ReadLines(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -977,7 +982,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadLines(testFileTxt);
+            var content = _fileHelper.ReadLines(testFileTxt);
 
             //Assert
             Assert.That(content, Is.EqualTo(text));
@@ -991,7 +996,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadLinesAsync(testFileTxt);
+            var content = await _fileHelper.ReadLinesAsync(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -1011,7 +1016,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadLinesAsync(testFileTxt);
+            var content = await _fileHelper.ReadLinesAsync(testFileTxt);
 
             //Assert
             Assert.That(content, Is.EqualTo(text));
@@ -1025,7 +1030,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadText(testFileTxt);
+            var content = _fileHelper.ReadText(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -1042,7 +1047,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = FileHelper.ReadText(testFileTxt);
+            var content = _fileHelper.ReadText(testFileTxt);
 
             //Assert
             Assert.That(content, Is.EqualTo(text));
@@ -1056,7 +1061,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadTextAsync(testFileTxt);
+            var content = await _fileHelper.ReadTextAsync(testFileTxt);
 
             //Assert
             Assert.That(content, Is.Empty);
@@ -1073,7 +1078,7 @@ namespace LSCode.Files.Test.Unit.Files
             streamWriter.Close();
 
             //Act
-            var content = await FileHelper.ReadTextAsync(testFileTxt);
+            var content = await _fileHelper.ReadTextAsync(testFileTxt);
 
             //Assert
             Assert.That(content, Is.EqualTo(text));
