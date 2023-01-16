@@ -7,10 +7,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LSCode.Files.Files
+namespace LSCode.Files.Files.Services
 {
     /// <summary>Provides the implementation methods that help the manipulation of files.</summary>
-    public class FileHelper : IFileHelper
+    public class FileHelper : IFileService
     {
         /// <summary>
         ///     Appends text to a file, and then closes the file. If the specified file does
@@ -256,7 +256,7 @@ namespace LSCode.Files.Files
             using var RMCrypto = new RijndaelManaged();
 
             using var cryptoStream = new CryptoStream(fileStream, RMCrypto.CreateEncryptor(secretBytes, secretBytes), CryptoStreamMode.Write);
-            
+
             foreach (byte b in fileBytes)
                 cryptoStream.WriteByte(b);
 
@@ -279,7 +279,7 @@ namespace LSCode.Files.Files
         /// <summary>Get information from the desired file.</summary>
         /// <param name="path">File path to get your informations.</param>
         /// <returns>File informations.</returns>
-        public FileInfo Get(string path) =>  new FileInfo(path);
+        public FileInfo Get(string path) => new FileInfo(path);
 
         /// <summary>Move file without possibility to overwrite if it already exists.</summary>
         /// <param name="sourcePath">The path of the file to move. Can include a relative or absolute path.</param>

@@ -1,19 +1,19 @@
-﻿using LSCode.Files.Directories;
-using LSCode.Files.Directories.Interfaces;
+﻿using LSCode.Files.Directories.Interfaces;
+using LSCode.Files.Directories.Services;
 using NUnit.Framework;
 using System;
 using System.IO;
 
-namespace LSCode.Files.Test.Unit.Directories
+namespace LSCode.Files.Test.Integration.Directories.Services
 {
-    internal class DirectoryHelperTest
+    internal class DirectoryServiceTest
     {
         private readonly static string testDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myTestDirectory";
         private readonly static string testMovedDirectory = @$"{AppDomain.CurrentDomain.BaseDirectory}\myMovedTestDirectory";
 
-        private readonly IDirectoryHelper _directoryHelper;
+        private readonly IDirectoryService _directoryService;
 
-        public DirectoryHelperTest() => _directoryHelper = new DirectoryHelper();
+        public DirectoryServiceTest() => _directoryService = new DirectoryService();
 
         [SetUp]
         public void SetUp()
@@ -39,7 +39,7 @@ namespace LSCode.Files.Test.Unit.Directories
         public void Create()
         {
             //Arrange
-            var directoryInfo = _directoryHelper.Create(testDirectory);
+            var directoryInfo = _directoryService.Create(testDirectory);
 
             //Act
             var exist = Directory.Exists(testDirectory);
@@ -74,7 +74,7 @@ namespace LSCode.Files.Test.Unit.Directories
             streamWriter2.Close();
 
             //Act
-            _directoryHelper.Delete(testDirectory);
+            _directoryService.Delete(testDirectory);
 
             var exist = Directory.Exists(testDirectory);
 
@@ -89,7 +89,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(testDirectory);
 
             //Act
-            _directoryHelper.Delete(testDirectory);
+            _directoryService.Delete(testDirectory);
 
             var exist = Directory.Exists(testDirectory);
 
@@ -101,7 +101,7 @@ namespace LSCode.Files.Test.Unit.Directories
         public void Exists_DirectoryDoesNotExist()
         {
             //Act
-            var exist = _directoryHelper.Exists(testDirectory);
+            var exist = _directoryService.Exists(testDirectory);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -114,7 +114,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(testDirectory);
 
             //Act
-            var exist = _directoryHelper.Exists(testDirectory);
+            var exist = _directoryService.Exists(testDirectory);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -124,7 +124,7 @@ namespace LSCode.Files.Test.Unit.Directories
         public void Get_DirectoryDoesNotExist()
         {
             //Act
-            var directoryInfo = _directoryHelper.Get(testDirectory);
+            var directoryInfo = _directoryService.Get(testDirectory);
 
             //Assert
             Assert.That(directoryInfo.Exists, Is.False);
@@ -137,7 +137,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(testDirectory);
 
             //Act
-            var directoryInfo = _directoryHelper.Get(testDirectory);
+            var directoryInfo = _directoryService.Get(testDirectory);
 
             //Assert
             Assert.Multiple(() =>
@@ -168,7 +168,7 @@ namespace LSCode.Files.Test.Unit.Directories
             streamWriter2.Close();
 
             //Act
-            var list = _directoryHelper.GetContent(testDirectory);
+            var list = _directoryService.GetContent(testDirectory);
 
             //Assert
             Assert.Multiple(() =>
@@ -192,7 +192,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(testDirectory);
 
             //Act
-            var list = _directoryHelper.GetContent(testDirectory);
+            var list = _directoryService.GetContent(testDirectory);
 
             //Assert
             Assert.That(list, Is.Empty);
@@ -205,7 +205,7 @@ namespace LSCode.Files.Test.Unit.Directories
             var expected = Directory.GetCurrentDirectory();
 
             //Act
-            var actual = _directoryHelper.GetCurrentDirectory();
+            var actual = _directoryService.GetCurrentDirectory();
 
             //Assert
             Assert.That(actual, Is.EqualTo(expected));
@@ -224,7 +224,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(pathSubDirectory2);
 
             //Act
-            var list = _directoryHelper.GetDirectories(testDirectory);
+            var list = _directoryService.GetDirectories(testDirectory);
 
             //Assert
             Assert.Multiple(() =>
@@ -244,7 +244,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(testDirectory);
 
             //Act
-            var list = _directoryHelper.GetDirectories(testDirectory);
+            var list = _directoryService.GetDirectories(testDirectory);
 
             //Assert
             Assert.That(list, Is.Empty);
@@ -259,7 +259,7 @@ namespace LSCode.Files.Test.Unit.Directories
             var expected = Directory.GetDirectoryRoot(testDirectory);
 
             //Act
-            var actual = _directoryHelper.GetDirectoryRoot(testDirectory);
+            var actual = _directoryService.GetDirectoryRoot(testDirectory);
 
             //Assert
             Assert.That(actual, Is.EqualTo(expected));
@@ -280,7 +280,7 @@ namespace LSCode.Files.Test.Unit.Directories
             streamWriter2.Close();
 
             //Act
-            var list = _directoryHelper.GetFiles(testDirectory);
+            var list = _directoryService.GetFiles(testDirectory);
 
             //Assert
             Assert.Multiple(() =>
@@ -300,7 +300,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(testDirectory);
 
             //Act
-            var list = _directoryHelper.GetFiles(testDirectory);
+            var list = _directoryService.GetFiles(testDirectory);
 
             //Assert
             Assert.That(list, Is.Empty);
@@ -313,7 +313,7 @@ namespace LSCode.Files.Test.Unit.Directories
             var expected = Directory.GetLogicalDrives();
 
             //Act
-            var actual = _directoryHelper.GetLogicalDrives();
+            var actual = _directoryService.GetLogicalDrives();
 
             //Assert
             Assert.That(actual, Is.EqualTo(expected));
@@ -328,7 +328,7 @@ namespace LSCode.Files.Test.Unit.Directories
             var expected = Directory.GetParent(testDirectory);
 
             //Act
-            var actual = _directoryHelper.GetParent(testDirectory);
+            var actual = _directoryService.GetParent(testDirectory);
 
             //Assert
             Assert.That(actual, Is.EqualTo(expected));
@@ -354,7 +354,7 @@ namespace LSCode.Files.Test.Unit.Directories
             streamWriter2.Close();
 
             //Act
-            _directoryHelper.Move(testDirectory, testMovedDirectory);
+            _directoryService.Move(testDirectory, testMovedDirectory);
 
             var sourcePathExist = Directory.Exists(testDirectory);
             var destinationPath = Directory.Exists(testMovedDirectory);
@@ -374,7 +374,7 @@ namespace LSCode.Files.Test.Unit.Directories
             Directory.CreateDirectory(testDirectory);
 
             //Act
-            _directoryHelper.Move(testDirectory, testMovedDirectory);
+            _directoryService.Move(testDirectory, testMovedDirectory);
 
             var sourcePathExist = Directory.Exists(testDirectory);
             var destinationPath = Directory.Exists(testMovedDirectory);

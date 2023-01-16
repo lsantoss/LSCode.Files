@@ -5,10 +5,10 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace LSCode.Files.FTP
+namespace LSCode.Files.FTP.Services
 {
     /// <summary>Helper that assists in the manipulation of directories and files through FTP.</summary>
-    public class FTPHelper : IFTPHelper
+    public class FTPService : IFTPService
     {
         /// <value>User used for the connection.</value>
         public string User { get; private set; }
@@ -20,7 +20,7 @@ namespace LSCode.Files.FTP
         /// <param name="user">User used for the connection.</param>
         /// <param name="password">Password used for the connection.</param>
         /// <returns>Create an instance of the FTPHelper class.</returns>
-        public FTPHelper(string user, string password)
+        public FTPService(string user, string password)
         {
             User = user;
             Password = password;

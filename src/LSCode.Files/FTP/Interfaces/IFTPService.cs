@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace LSCode.Files.FTP.Interfaces
 {
     /// <summary>Provides contract for the implementation of FTP connections, providing methods that help the manipulation of directories and files.</summary>
-    public interface IFTPHelper
+    public interface IFTPService
     {
         /// <value>User used for the connection.</value>
         public string User { get; }

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("LSCode.Files.Test.Unit")]
-namespace LSCode.Files.Constants
+namespace LSCode.Files.FTP.Constants
 {
     /// <summary>Provides all error messages present in that package.</summary>
     internal static class Errors

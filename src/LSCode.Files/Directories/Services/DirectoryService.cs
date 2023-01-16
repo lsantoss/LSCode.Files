@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace LSCode.Files.Directories
+namespace LSCode.Files.Directories.Services
 {
     /// <summary>Provides the implementation methods that help the manipulation of directories.</summary>
-    public class DirectoryHelper : IDirectoryHelper
+    public class DirectoryService : IDirectoryService
     {
         /// <summary>Creates directory in parameterized path.</summary>
         /// <param name="path">The directory path to create.</param>

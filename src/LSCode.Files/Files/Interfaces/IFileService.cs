@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LSCode.Files.Files.Interfaces
 {
     /// <summary>Provides contract for the implementation methods that help the manipulation of files.</summary>
-    public interface IFileHelper
+    public interface IFileService
     {
         /// <summary>
         ///     Appends text to a file, and then closes the file. If the specified file does

@@ -1,22 +1,22 @@
-﻿using LSCode.Files.FTP;
-using LSCode.Files.FTP.Interfaces;
+﻿using LSCode.Files.FTP.Interfaces;
+using LSCode.Files.FTP.Services;
 using NUnit.Framework;
 using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace LSCode.Files.Test.Unit.FTP
+namespace LSCode.Files.Test.Integration.FTP.Services
 {
-    internal class FTPHelperTest
+    internal class FTPServiceTest
     {
         private readonly static string binFtpTestFile = @$"{AppDomain.CurrentDomain.BaseDirectory}\testFile.txt";
         private readonly static string ftpTestDirectory = "ftp://192.168.56.1/ftpTestDirectory";
         private readonly static string ftpTestFile = "ftp://192.168.56.1/testFile.txt";
 
-        private readonly IFTPHelper _fTPHelper;
+        private readonly IFTPService _fTPService;
 
-        public FTPHelperTest() => _fTPHelper = new FTPHelper("lscode.ftp", "root");
+        public FTPServiceTest() => _fTPService = new FTPService("lscode.ftp", "root");
 
         [SetUp]
         public void SetUp()
@@ -24,11 +24,11 @@ namespace LSCode.Files.Test.Unit.FTP
             if (File.Exists(binFtpTestFile))
                 File.Delete(binFtpTestFile);
 
-            if (_fTPHelper.DirectoryExists(ftpTestDirectory))
-                _fTPHelper.DeleteDirectory(ftpTestDirectory);
+            if (_fTPService.DirectoryExists(ftpTestDirectory))
+                _fTPService.DeleteDirectory(ftpTestDirectory);
 
-            if (_fTPHelper.FileExists(ftpTestFile))
-                _fTPHelper.DeleteFile(ftpTestFile);
+            if (_fTPService.FileExists(ftpTestFile))
+                _fTPService.DeleteFile(ftpTestFile);
         }
 
         [TearDown]
@@ -37,11 +37,11 @@ namespace LSCode.Files.Test.Unit.FTP
             if (File.Exists(binFtpTestFile))
                 File.Delete(binFtpTestFile);
 
-            if (_fTPHelper.DirectoryExists(ftpTestDirectory))
-                _fTPHelper.DeleteDirectory(ftpTestDirectory);
+            if (_fTPService.DirectoryExists(ftpTestDirectory))
+                _fTPService.DeleteDirectory(ftpTestDirectory);
 
-            if (_fTPHelper.FileExists(ftpTestFile))
-                _fTPHelper.DeleteFile(ftpTestFile);
+            if (_fTPService.FileExists(ftpTestFile))
+                _fTPService.DeleteFile(ftpTestFile);
         }
 
         [Test]
@@ -50,15 +50,15 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             var fileBase64StringAppend = "IGFwcGVuZGVk";
 
             //Act
-            _fTPHelper.AppendFile(ftpTestFile, fileBase64StringAppend);
+            _fTPService.AppendFile(ftpTestFile, fileBase64StringAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -75,10 +75,10 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBase64StringAppend = "IGFwcGVuZGVk";
 
             //Act
-            _fTPHelper.AppendFile(ftpTestFile, fileBase64StringAppend);
+            _fTPService.AppendFile(ftpTestFile, fileBase64StringAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -94,15 +94,15 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBytes = Convert.FromBase64String("dGVzdA==");
 
-            _fTPHelper.UploadFile(fileBytes, ftpTestFile);
+            _fTPService.UploadFile(fileBytes, ftpTestFile);
 
             var fileBytesAppend = Convert.FromBase64String("IGFwcGVuZGVk");
 
             //Act
-            _fTPHelper.AppendFile(ftpTestFile, fileBytesAppend);
+            _fTPService.AppendFile(ftpTestFile, fileBytesAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -119,10 +119,10 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBytesAppend = Convert.FromBase64String("IGFwcGVuZGVk");
 
             //Act
-            _fTPHelper.AppendFile(ftpTestFile, fileBytesAppend);
+            _fTPService.AppendFile(ftpTestFile, fileBytesAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -138,15 +138,15 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             var fileBase64StringAppend = "IGFwcGVuZGVk";
 
             //Act
-            await _fTPHelper.AppendFileAsync(ftpTestFile, fileBase64StringAppend);
+            await _fTPService.AppendFileAsync(ftpTestFile, fileBase64StringAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -163,10 +163,10 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBase64StringAppend = "IGFwcGVuZGVk";
 
             //Act
-            await _fTPHelper.AppendFileAsync(ftpTestFile, fileBase64StringAppend);
+            await _fTPService.AppendFileAsync(ftpTestFile, fileBase64StringAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -182,15 +182,15 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBytes = Convert.FromBase64String("dGVzdA==");
 
-            _fTPHelper.UploadFile(fileBytes, ftpTestFile);
+            _fTPService.UploadFile(fileBytes, ftpTestFile);
 
             var fileBytesAppend = Convert.FromBase64String("IGFwcGVuZGVk");
 
             //Act
-            await _fTPHelper.AppendFileAsync(ftpTestFile, fileBytesAppend);
+            await _fTPService.AppendFileAsync(ftpTestFile, fileBytesAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -207,10 +207,10 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBytesAppend = Convert.FromBase64String("IGFwcGVuZGVk");
 
             //Act
-            await _fTPHelper.AppendFileAsync(ftpTestFile, fileBytesAppend);
+            await _fTPService.AppendFileAsync(ftpTestFile, fileBytesAppend);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -224,10 +224,10 @@ namespace LSCode.Files.Test.Unit.FTP
         public void CreateDirectory()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             //Act
-            var exist = _fTPHelper.DirectoryExists(ftpTestDirectory);
+            var exist = _fTPService.DirectoryExists(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -237,10 +237,10 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task CreateDirectoryAsync()
         {
             //Arrange
-            await _fTPHelper.CreateDirectoryAsync(ftpTestDirectory);
+            await _fTPService.CreateDirectoryAsync(ftpTestDirectory);
 
             //Act
-            var exist = _fTPHelper.DirectoryExists(ftpTestDirectory);
+            var exist = _fTPService.DirectoryExists(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -250,12 +250,12 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DeleteDirectory_DirectoryExists()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             //Act
-            _fTPHelper.DeleteDirectory(ftpTestDirectory);
+            _fTPService.DeleteDirectory(ftpTestDirectory);
 
-            var exist = _fTPHelper.DirectoryExists(ftpTestDirectory);
+            var exist = _fTPService.DirectoryExists(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -265,19 +265,19 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DeleteDirectory_DirectoryDoesNotExist()
         {
             //Assert
-            Assert.Throws<WebException>(() => _fTPHelper.DeleteDirectory(ftpTestDirectory));
+            Assert.Throws<WebException>(() => _fTPService.DeleteDirectory(ftpTestDirectory));
         }
 
         [Test]
         public async Task DeleteDirectoryAsync_DirectoryExists()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             //Act
-            await _fTPHelper.DeleteDirectoryAsync(ftpTestDirectory);
+            await _fTPService.DeleteDirectoryAsync(ftpTestDirectory);
 
-            var exist = _fTPHelper.DirectoryExists(ftpTestDirectory);
+            var exist = _fTPService.DirectoryExists(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -287,7 +287,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DeleteDirectoryAsync_DirectoryDoesNotExist()
         {
             //Assert
-            Assert.ThrowsAsync<WebException>(() => _fTPHelper.DeleteDirectoryAsync(ftpTestDirectory));
+            Assert.ThrowsAsync<WebException>(() => _fTPService.DeleteDirectoryAsync(ftpTestDirectory));
         }
 
         [Test]
@@ -296,12 +296,12 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            _fTPHelper.DeleteFile(ftpTestFile);
+            _fTPService.DeleteFile(ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -311,9 +311,9 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DeleteFile_FileDoesNotExist()
         {
             //Act
-            _fTPHelper.DeleteFile(ftpTestFile);
+            _fTPService.DeleteFile(ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -325,12 +325,12 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            await _fTPHelper.DeleteFileAsync(ftpTestFile);
+            await _fTPService.DeleteFileAsync(ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -340,9 +340,9 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task DeleteFileAsync_FileDoesNotExist()
         {
             //Act
-            await _fTPHelper.DeleteFileAsync(ftpTestFile);
+            await _fTPService.DeleteFileAsync(ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -352,10 +352,10 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DirectoryExists_DirectoryExists()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             //Act
-            var exist = _fTPHelper.DirectoryExists(ftpTestDirectory);
+            var exist = _fTPService.DirectoryExists(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -365,7 +365,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DirectoryExists_DirectoryDoesNotExist()
         {
             //Act
-            var exist = _fTPHelper.DirectoryExists(ftpTestDirectory);
+            var exist = _fTPService.DirectoryExists(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -375,10 +375,10 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task DirectoryExistsAsync_DirectoryExists()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             //Act
-            var exist = await _fTPHelper.DirectoryExistsAsync(ftpTestDirectory);
+            var exist = await _fTPService.DirectoryExistsAsync(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -388,7 +388,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task DirectoryExistsAsync_DirectoryDoesNotExist()
         {
             //Act
-            var exist = await _fTPHelper.DirectoryExistsAsync(ftpTestDirectory);
+            var exist = await _fTPService.DirectoryExistsAsync(ftpTestDirectory);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -400,12 +400,12 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            _fTPHelper.DownloadFile(ftpTestFile, binFtpTestFile);
+            _fTPService.DownloadFile(ftpTestFile, binFtpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -415,7 +415,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DownloadFile_FileDoesNotExist()
         {
             //Assert
-            Assert.Throws<WebException>(() => _fTPHelper.DownloadFile(ftpTestFile, binFtpTestFile));
+            Assert.Throws<WebException>(() => _fTPService.DownloadFile(ftpTestFile, binFtpTestFile));
         }
 
         [Test]
@@ -424,12 +424,12 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            await _fTPHelper.DownloadFileAsync(ftpTestFile, binFtpTestFile);
+            await _fTPService.DownloadFileAsync(ftpTestFile, binFtpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -439,7 +439,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void DownloadFileAsync_FileDoesNotExist()
         {
             //Assert
-            Assert.ThrowsAsync<WebException>(() => _fTPHelper.DownloadFileAsync(ftpTestFile, binFtpTestFile));
+            Assert.ThrowsAsync<WebException>(() => _fTPService.DownloadFileAsync(ftpTestFile, binFtpTestFile));
         }
 
         [Test]
@@ -448,10 +448,10 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -461,7 +461,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void FileExists_FileDoesNotExist()
         {
             //Act
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -473,10 +473,10 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            var exist = await _fTPHelper.FileExistsAsync(ftpTestFile);
+            var exist = await _fTPService.FileExistsAsync(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -486,7 +486,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task FileExistsAsync_FileDoesNotExist()
         {
             //Act
-            var exist = await _fTPHelper.FileExistsAsync(ftpTestFile);
+            var exist = await _fTPService.FileExistsAsync(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.False);
@@ -498,10 +498,10 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.That(size, Is.EqualTo(4));
@@ -511,7 +511,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void GetFileSize_FileDoesNotExist()
         {
             //Act
-            var size = _fTPHelper.GetFileSize(ftpTestFile);
+            var size = _fTPService.GetFileSize(ftpTestFile);
 
             //Assert
             Assert.That(size, Is.Zero);
@@ -523,10 +523,10 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            var size = await _fTPHelper.GetFileSizeAsync(ftpTestFile);
+            var size = await _fTPService.GetFileSizeAsync(ftpTestFile);
 
             //Assert
             Assert.That(size, Is.EqualTo(4));
@@ -536,7 +536,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task GetFileSizeAsync_FileDoesNotExist()
         {
             //Act
-            var size = await _fTPHelper.GetFileSizeAsync(ftpTestFile);
+            var size = await _fTPService.GetFileSizeAsync(ftpTestFile);
 
             //Assert
             Assert.That(size, Is.Zero);
@@ -548,10 +548,10 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            var date = _fTPHelper.GetLastModifiedDateUTC(ftpTestFile);
+            var date = _fTPService.GetLastModifiedDateUTC(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -566,7 +566,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void GetLastModifiedDateUTC_FileDoesNotExist()
         {
             //Assert
-            Assert.Throws<WebException>(() => _fTPHelper.GetLastModifiedDateUTC(ftpTestFile));
+            Assert.Throws<WebException>(() => _fTPService.GetLastModifiedDateUTC(ftpTestFile));
         }
 
         [Test]
@@ -575,10 +575,10 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             //Act
-            var date = await _fTPHelper.GetLastModifiedDateUTCAsync(ftpTestFile);
+            var date = await _fTPService.GetLastModifiedDateUTCAsync(ftpTestFile);
 
             //Assert
             Assert.Multiple(() =>
@@ -593,26 +593,26 @@ namespace LSCode.Files.Test.Unit.FTP
         public void GetLastModifiedDateUTCAsync_FileDoesNotExist()
         {
             //Assert
-            Assert.ThrowsAsync<WebException>(() => _fTPHelper.GetLastModifiedDateUTCAsync(ftpTestFile));
+            Assert.ThrowsAsync<WebException>(() => _fTPService.GetLastModifiedDateUTCAsync(ftpTestFile));
         }
 
         [Test]
         public void ListDirectoryContent_ListOfFilesAndDirectories()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
-            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir1");
-            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir2");
-            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir3");
-            _fTPHelper.UploadFile("dGVzdA==", $@"{ftpTestDirectory}\testFile.txt");
+            _fTPService.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPService.CreateDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPService.CreateDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPService.UploadFile("dGVzdA==", $@"{ftpTestDirectory}\testFile.txt");
 
             //Act
-            var list = _fTPHelper.ListDirectoryContent(ftpTestDirectory);
+            var list = _fTPService.ListDirectoryContent(ftpTestDirectory);
 
-            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir1");
-            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir2");
-            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir3");
-            _fTPHelper.DeleteFile($@"{ftpTestDirectory}\testFile.txt");
+            _fTPService.DeleteDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPService.DeleteDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPService.DeleteDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPService.DeleteFile($@"{ftpTestDirectory}\testFile.txt");
 
             //Assert
             Assert.Multiple(() =>
@@ -628,10 +628,10 @@ namespace LSCode.Files.Test.Unit.FTP
         public void ListDirectoryContent_WithoutContent()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             //Act
-            var list = _fTPHelper.ListDirectoryContent(ftpTestDirectory);
+            var list = _fTPService.ListDirectoryContent(ftpTestDirectory);
 
             //Assert
             Assert.Multiple(() =>
@@ -644,19 +644,19 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task ListDirectoryContentAsync_ListOfFilesAndDirectories()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
-            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir1");
-            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir2");
-            _fTPHelper.CreateDirectory($@"{ftpTestDirectory}\dir3");
-            _fTPHelper.UploadFile("dGVzdA==", $@"{ftpTestDirectory}\testFile.txt");
+            _fTPService.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPService.CreateDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPService.CreateDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPService.UploadFile("dGVzdA==", $@"{ftpTestDirectory}\testFile.txt");
 
             //Act
-            var list = await _fTPHelper.ListDirectoryContentAsync(ftpTestDirectory);
+            var list = await _fTPService.ListDirectoryContentAsync(ftpTestDirectory);
 
-            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir1");
-            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir2");
-            _fTPHelper.DeleteDirectory($@"{ftpTestDirectory}\dir3");
-            _fTPHelper.DeleteFile($@"{ftpTestDirectory}\testFile.txt");
+            _fTPService.DeleteDirectory($@"{ftpTestDirectory}\dir1");
+            _fTPService.DeleteDirectory($@"{ftpTestDirectory}\dir2");
+            _fTPService.DeleteDirectory($@"{ftpTestDirectory}\dir3");
+            _fTPService.DeleteFile($@"{ftpTestDirectory}\testFile.txt");
 
             //Assert
             Assert.Multiple(() =>
@@ -672,10 +672,10 @@ namespace LSCode.Files.Test.Unit.FTP
         public async Task ListDirectoryContentAsync_WithoutContent()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             //Act
-            var list = await _fTPHelper.ListDirectoryContentAsync(ftpTestDirectory);
+            var list = await _fTPService.ListDirectoryContentAsync(ftpTestDirectory);
 
             //Assert
             Assert.Multiple(() =>
@@ -688,16 +688,16 @@ namespace LSCode.Files.Test.Unit.FTP
         public void Rename_DirectoryExists()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             var newPath = "ftp://192.168.56.1/directoryRenamed";
 
             //Act
-            _fTPHelper.Rename(ftpTestDirectory, "directoryRenamed");
+            _fTPService.Rename(ftpTestDirectory, "directoryRenamed");
 
-            var exist = _fTPHelper.DirectoryExists(newPath);
+            var exist = _fTPService.DirectoryExists(newPath);
 
-            _fTPHelper.DeleteDirectory(newPath);
+            _fTPService.DeleteDirectory(newPath);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -707,7 +707,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void Rename_DirectoryDoesNotExist()
         {
             //Assert
-            Assert.Throws<WebException>(() => _fTPHelper.Rename(ftpTestDirectory, "directoryRenamed"));
+            Assert.Throws<WebException>(() => _fTPService.Rename(ftpTestDirectory, "directoryRenamed"));
         }
 
         [Test]
@@ -716,16 +716,16 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             var newPath = "ftp://192.168.56.1/testFileRenamed.txt";
 
             //Act
-            _fTPHelper.Rename(ftpTestFile, "testFileRenamed.txt");
+            _fTPService.Rename(ftpTestFile, "testFileRenamed.txt");
 
-            var exist = _fTPHelper.FileExists(newPath);
+            var exist = _fTPService.FileExists(newPath);
 
-            _fTPHelper.DeleteFile(newPath);
+            _fTPService.DeleteFile(newPath);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -735,23 +735,23 @@ namespace LSCode.Files.Test.Unit.FTP
         public void Rename_FileDoesNotExist()
         {
             //Assert
-            Assert.Throws<WebException>(() => _fTPHelper.Rename(ftpTestFile, "testFileRenamed.txt"));
+            Assert.Throws<WebException>(() => _fTPService.Rename(ftpTestFile, "testFileRenamed.txt"));
         }
 
         [Test]
         public async Task RenameAsync_DirectoryExists()
         {
             //Arrange
-            _fTPHelper.CreateDirectory(ftpTestDirectory);
+            _fTPService.CreateDirectory(ftpTestDirectory);
 
             var newPath = "ftp://192.168.56.1/directoryRenamed";
 
             //Act
-            await _fTPHelper.RenameAsync(ftpTestDirectory, "directoryRenamed");
+            await _fTPService.RenameAsync(ftpTestDirectory, "directoryRenamed");
 
-            var exist = _fTPHelper.DirectoryExists(newPath);
+            var exist = _fTPService.DirectoryExists(newPath);
 
-            _fTPHelper.DeleteDirectory(newPath);
+            _fTPService.DeleteDirectory(newPath);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -761,7 +761,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void RenameAsync_DirectoryDoesNotExist()
         {
             //Assert
-            Assert.ThrowsAsync<WebException>(() => _fTPHelper.RenameAsync(ftpTestDirectory, "directoryRenamed"));
+            Assert.ThrowsAsync<WebException>(() => _fTPService.RenameAsync(ftpTestDirectory, "directoryRenamed"));
         }
 
         [Test]
@@ -770,16 +770,16 @@ namespace LSCode.Files.Test.Unit.FTP
             //Arrange
             var fileBase64String = "dGVzdA==";
 
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
             var newPath = "ftp://192.168.56.1/testFileRenamed.txt";
 
             //Act
-            await _fTPHelper.RenameAsync(ftpTestFile, "testFileRenamed.txt");
+            await _fTPService.RenameAsync(ftpTestFile, "testFileRenamed.txt");
 
-            var exist = _fTPHelper.FileExists(newPath);
+            var exist = _fTPService.FileExists(newPath);
 
-            _fTPHelper.DeleteFile(newPath);
+            _fTPService.DeleteFile(newPath);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -789,7 +789,7 @@ namespace LSCode.Files.Test.Unit.FTP
         public void RenameAsync_FileDoesNotExist()
         {
             //Assert
-            Assert.ThrowsAsync<WebException>(() => _fTPHelper.RenameAsync(ftpTestFile, "testFileRenamed.txt"));
+            Assert.ThrowsAsync<WebException>(() => _fTPService.RenameAsync(ftpTestFile, "testFileRenamed.txt"));
         }
 
         [Test]
@@ -799,9 +799,9 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBase64String = "dGVzdA==";
 
             //Act
-            _fTPHelper.UploadFile(fileBase64String, ftpTestFile);
+            _fTPService.UploadFile(fileBase64String, ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -814,9 +814,9 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBytes = Convert.FromBase64String("dGVzdA==");
 
             //Act
-            _fTPHelper.UploadFile(fileBytes, ftpTestFile);
+            _fTPService.UploadFile(fileBytes, ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -829,9 +829,9 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBase64String = "dGVzdA==";
 
             //Act
-            await _fTPHelper.UploadFileAsync(fileBase64String, ftpTestFile);
+            await _fTPService.UploadFileAsync(fileBase64String, ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);
@@ -844,9 +844,9 @@ namespace LSCode.Files.Test.Unit.FTP
             var fileBytes = Convert.FromBase64String("dGVzdA==");
 
             //Act
-            await _fTPHelper.UploadFileAsync(fileBytes, ftpTestFile);
+            await _fTPService.UploadFileAsync(fileBytes, ftpTestFile);
 
-            var exist = _fTPHelper.FileExists(ftpTestFile);
+            var exist = _fTPService.FileExists(ftpTestFile);
 
             //Assert
             Assert.That(exist, Is.True);

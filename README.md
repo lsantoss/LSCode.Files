@@ -22,6 +22,7 @@ Offers codes to facilitate the manipulation of files and directories in projects
 
 ## Dependencies:
 - Magick.NET-Q8-AnyCPU
+- Microsoft.Extensions.DependencyInjection.Abstractions
 
 ---
 
