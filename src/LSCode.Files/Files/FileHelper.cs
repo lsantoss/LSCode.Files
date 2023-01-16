@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LSCode.Files.Files
 {
-    /// <summary>Helper that assists in files manipulations.</summary>
+    /// <summary>Provides the implementation methods that help the manipulation of files.</summary>
     public class FileHelper : IFileHelper
     {
         /// <summary>

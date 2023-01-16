@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LSCode.Files.Files.Interfaces
 {
+    /// <summary>Provides contract for the implementation methods that help the manipulation of files.</summary>
     public interface IFileHelper
     {
         /// <summary>

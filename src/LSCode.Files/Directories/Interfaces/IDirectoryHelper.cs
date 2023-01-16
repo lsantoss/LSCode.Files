@@ -3,6 +3,7 @@ using System.IO;
 
 namespace LSCode.Files.Directories.Interfaces
 {
+    /// <summary>Provides contract for the implementation methods that help the manipulation of directories.</summary>
     public interface IDirectoryHelper
     {
         /// <summary>Creates directory in parameterized path.</summary>
