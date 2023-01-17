@@ -13,9 +13,8 @@ Offers codes to facilitate the manipulation of files and directories in projects
 ---
 
 ## Current features:
-
-- File manipulation
 - Directory manipulation
+- File manipulation
 - FTP functionalities
 
 ---
@@ -35,13 +34,172 @@ Offers codes to facilitate the manipulation of files and directories in projects
 
 ---
 
-## How install:
+## How to install:
 - Click on the following link and see here some ways to install: [click here](https://www.nuget.org/packages/LSCode.Files "LSCode.Files page on nuget.org").
 
-- For example:
+---
+
+## How to use directory manipulation service:
+First install the package, for example:
 
 ```xml
 <PackageReference Include="LSCode.Files" Version="x.x.x" />
 ```
+
+Add the following line of code according to the .Net version:
+- .Net 6 (without Startup.cs) - `Program.cs` file
+- .Net 6 (with Startup.cs) ou less - `Startup.cs` file
+
+```c#
+using LSCode.Files.Directories.Extensions;
+```
+
+After that, according to the .Net version configure the following file:
+- .Net 6 (without Startup.cs) - `Program.cs` file
+- .Net 6 (with Startup.cs) ou less - `Startup.cs` file, add the following line in the `ConfigureServices` method
+
+```c#
+//.Net 6 (without Startup.cs)
+builder.Services.AddDirectoryService();
+
+//.Net 6 (with Startup.cs) ou less
+services.AddDirectoryService();
+```
+
+In the file that you want to use the service, you must import the following namespace:
+
+```c#
+using LSCode.Files.Directories.Interfaces;
+```
+
+Then add the interface in the constructor:
+
+```c#
+namespace MyNamespace
+{
+  public class MyClass
+  {
+    private readonly IDirectoryService _service;
+
+    public MyClass(IDirectoryService service) => _service = service;
+  }
+}
+```
+
+The following link contains the list of functionalities present in the service. 
+
+Each method has a description of itself, its parameters and return: 
+
+Link: [click here](https://github.com/lsantoss/LSCode.Files/blob/main/src/LSCode.Files/Directories/Interfaces/IDirectoryService.cs "IDirectoryService.cs page on github.com").
+
+---
+
+## How to use file manipulation service:
+First install the package, for example:
+
+```xml
+<PackageReference Include="LSCode.Files" Version="x.x.x" />
+```
+
+Add the following line of code according to the .Net version:
+- .Net 6 (without Startup.cs) - `Program.cs` file
+- .Net 6 (with Startup.cs) ou less - `Startup.cs` file
+
+```c#
+using LSCode.Files.Files.Extensions;
+```
+
+After that, according to the .Net version configure the following file:
+- .Net 6 (without Startup.cs) - `Program.cs` file
+- .Net 6 (with Startup.cs) ou less - `Startup.cs` file, add the following line in the `ConfigureServices` method
+
+```c#
+//.Net 6 (without Startup.cs)
+builder.Services.AddFileService();
+
+//.Net 6 (with Startup.cs) ou less
+services.AddFileService();
+```
+
+In the file that you want to use the service, you must import the following namespace:
+
+```c#
+using LSCode.Files.Files.Interfaces;
+```
+
+Then add the interface in the constructor:
+
+```c#
+namespace MyNamespace
+{
+  public class MyClass
+  {
+    private readonly IFileService _service;
+
+    public MyClass(IFileService service) => _service = service;
+  }
+}
+```
+
+The following link contains the list of functionalities present in the service. 
+
+Each method has a description of itself, its parameters and return: 
+
+Link: [click here](https://github.com/lsantoss/LSCode.Files/blob/main/src/LSCode.Files/Files/Interfaces/IFileService.cs "IFileService.cs page on github.com").
+
+---
+
+## How to use ftp service:
+First install the package, for example:
+
+```xml
+<PackageReference Include="LSCode.Files" Version="x.x.x" />
+```
+
+Add the following line of code according to the .Net version:
+- .Net 6 (without Startup.cs) - `Program.cs` file
+- .Net 6 (with Startup.cs) ou less - `Startup.cs` file
+
+```c#
+using LSCode.Files.FTP.Extensions;
+```
+
+After that, according to the .Net version configure the following file:
+- .Net 6 (without Startup.cs) - `Program.cs` file
+- .Net 6 (with Startup.cs) ou less - `Startup.cs` file, add the following line in the `ConfigureServices` method
+
+```c#
+//.Net 6 (without Startup.cs)
+builder.Services.AddFTPService("user", "password");
+
+//.Net 6 (with Startup.cs) ou less
+services.AddFTPService("user", "password");
+```
+
+In the file that you want to use the service, you must import the following namespace:
+
+```c#
+using LSCode.Files.FTP.Interfaces;
+```
+
+Then add the interface in the constructor:
+
+```c#
+namespace MyNamespace
+{
+  public class MyClass
+  {
+    private readonly IFTPService _service;
+
+    public MyClass(IFTPService service) => _service = service;
+  }
+}
+```
+
+The following link contains the list of functionalities present in the service. 
+
+Each method has a description of itself, its parameters and return: 
+
+Link: [click here](https://github.com/lsantoss/LSCode.Files/blob/main/src/LSCode.Files/FTP/Interfaces/IFTPService.cs "IFTPService.cs page on github.com").
 
 ---
