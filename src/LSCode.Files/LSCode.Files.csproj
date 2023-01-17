@@ -5,7 +5,7 @@
     <Authors>LSCode</Authors>
     <Company>LSCode</Company>
     <Copyright>LSCode</Copyright>
-    <AssemblyVersion>2022.08.23.1</AssemblyVersion>
+    <AssemblyVersion>2023.01.17.1</AssemblyVersion>
     <Description>Offers codes to facilitate the manipulation of files in projects produced by LSCode</Description>
     <Product>LSCode.Files</Product>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -23,7 +23,7 @@ File to facilitate dependency injection of package features;
 Documentation for using the package.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENCE</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
