@@ -5,20 +5,20 @@
     <Authors>LSCode</Authors>
     <Company>LSCode</Company>
     <Copyright>LSCode</Copyright>
-    <AssemblyVersion>2023.02.28.1</AssemblyVersion>
+    <AssemblyVersion>2023.02.28.2</AssemblyVersion>
     <Description>Offers codes to facilitate the manipulation of files in projects produced by LSCode</Description>
     <Product>LSCode.Files</Product>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Version>3.0.5</Version>
+    <Version>3.0.6</Version>
     <PackageIcon>LSCodePackageIcon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <FileVersion>3.0.5</FileVersion>
+    <FileVersion>3.0.6</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/lsantoss/LSCode.Files</RepositoryUrl>
     <PackageProjectUrl>https://github.com/lsantoss/LSCode.Files</PackageProjectUrl>
     <PackageTags>LSCode</PackageTags>
-    <PackageReleaseNotes>Updating documentation for using the package.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updating project dependencies.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -45,8 +45,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="8.3.3" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="12.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
