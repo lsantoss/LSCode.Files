@@ -46,24 +46,20 @@ First install the package, for example:
 <PackageReference Include="LSCode.Files" Version="x.x.x" />
 ```
 
-Add the following line of code according to the .Net version:
-- .Net 6 (without Startup.cs) - `Program.cs` file
-- .Net 6 (with Startup.cs) ou less - `Startup.cs` file
+In the file where the services used in the application are added (`Startup.cs`, `Program.cs` or others), you must import the following namespace:
 
 ```c#
 using LSCode.Files.Directories.Extensions;
 ```
 
-After that, according to the .Net version configure the following file:
-- .Net 6 (without Startup.cs) - `Program.cs` file
-- .Net 6 (with Startup.cs) ou less - `Startup.cs` file, add the following line in the `ConfigureServices` method
+Then add the following line to register the service:
 
 ```c#
-//.Net 6 (without Startup.cs)
-builder.Services.AddDirectoryService();
-
-//.Net 6 (with Startup.cs) ou less
 services.AddDirectoryService();
+
+//or
+
+builder.Services.AddDirectoryService();
 ```
 
 In the file that you want to use the service, you must import the following namespace:
@@ -75,6 +71,8 @@ using LSCode.Files.Directories.Interfaces;
 Then add the interface in the constructor:
 
 ```c#
+using LSCode.Files.Directories.Interfaces;
+
 namespace MyNamespace
 {
   public class MyClass
@@ -101,24 +99,20 @@ First install the package, for example:
 <PackageReference Include="LSCode.Files" Version="x.x.x" />
 ```
 
-Add the following line of code according to the .Net version:
-- .Net 6 (without Startup.cs) - `Program.cs` file
-- .Net 6 (with Startup.cs) ou less - `Startup.cs` file
+In the file where the services used in the application are added (`Startup.cs`, `Program.cs` or others), you must import the following namespace:
 
 ```c#
 using LSCode.Files.Files.Extensions;
 ```
 
-After that, according to the .Net version configure the following file:
-- .Net 6 (without Startup.cs) - `Program.cs` file
-- .Net 6 (with Startup.cs) ou less - `Startup.cs` file, add the following line in the `ConfigureServices` method
+Then add the following line to register the service:
 
 ```c#
-//.Net 6 (without Startup.cs)
-builder.Services.AddFileService();
-
-//.Net 6 (with Startup.cs) ou less
 services.AddFileService();
+
+//or
+
+builder.Services.AddFileService();
 ```
 
 In the file that you want to use the service, you must import the following namespace:
@@ -130,6 +124,8 @@ using LSCode.Files.Files.Interfaces;
 Then add the interface in the constructor:
 
 ```c#
+using LSCode.Files.Files.Interfaces;
+
 namespace MyNamespace
 {
   public class MyClass
@@ -156,24 +152,20 @@ First install the package, for example:
 <PackageReference Include="LSCode.Files" Version="x.x.x" />
 ```
 
-Add the following line of code according to the .Net version:
-- .Net 6 (without Startup.cs) - `Program.cs` file
-- .Net 6 (with Startup.cs) ou less - `Startup.cs` file
+In the file where the services used in the application are added (`Startup.cs`, `Program.cs` or others), you must import the following namespace:
 
 ```c#
 using LSCode.Files.FTP.Extensions;
 ```
 
-After that, according to the .Net version configure the following file:
-- .Net 6 (without Startup.cs) - `Program.cs` file
-- .Net 6 (with Startup.cs) ou less - `Startup.cs` file, add the following line in the `ConfigureServices` method
+Then add the following line to register the service:
 
 ```c#
-//.Net 6 (without Startup.cs)
-builder.Services.AddFTPService("user", "password");
-
-//.Net 6 (with Startup.cs) ou less
 services.AddFTPService("user", "password");
+
+//or
+
+builder.Services.AddFTPService("user", "password");
 ```
 
 In the file that you want to use the service, you must import the following namespace:
@@ -185,6 +177,8 @@ using LSCode.Files.FTP.Interfaces;
 Then add the interface in the constructor:
 
 ```c#
+using LSCode.Files.FTP.Interfaces;
+
 namespace MyNamespace
 {
   public class MyClass

@@ -5,25 +5,24 @@
     <Authors>LSCode</Authors>
     <Company>LSCode</Company>
     <Copyright>LSCode</Copyright>
-    <AssemblyVersion>2023.01.17.1</AssemblyVersion>
+    <AssemblyVersion>2023.02.28.1</AssemblyVersion>
     <Description>Offers codes to facilitate the manipulation of files in projects produced by LSCode</Description>
     <Product>LSCode.Files</Product>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Version>3.0.0</Version>
+    <Version>3.0.5</Version>
     <PackageIcon>LSCodePackageIcon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <FileVersion>3.0.0</FileVersion>
+    <FileVersion>3.0.5</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/lsantoss/LSCode.Files</RepositoryUrl>
     <PackageProjectUrl>https://github.com/lsantoss/LSCode.Files</PackageProjectUrl>
     <PackageTags>LSCode</PackageTags>
-    <PackageReleaseNotes>Project refactoring and available features;
-File to facilitate dependency injection of package features;
-Documentation for using the package.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updating documentation for using the package.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Title>LSCode.Files</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
